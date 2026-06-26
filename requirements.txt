@@ -1,21 +1,13 @@
-# ── Web app (Flask server) ─────────────────────────────────────────────────────
+# ── Web app (Flask server / Render deployment) ─────────────────────────────
 Flask>=3.0,<4.0
 gunicorn>=22.0,<23.0
 gTTS>=2.5,<3.0
 
-# ── Desktop app (app.py) ───────────────────────────────────────────────────────
-# Core UI — built into Python, no install needed
-# tkinter
-
-# Audio capture
-sounddevice
-
-# Numerical audio processing
-numpy
-
-# On-device speech recognition (Whisper)
-faster-whisper
-
+# ── Desktop app (app.py — run locally) ─────────────────────────────────────
+# sounddevice
+# numpy
+# faster-whisper
+#
 # Note: macOS system tools used at runtime (pre-installed on all Macs):
 #   /usr/bin/say        — text-to-speech + BlackHole output routing
 #   /usr/bin/afconvert  — audio format conversion (Studio tab export)
