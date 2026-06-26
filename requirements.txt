@@ -1,0 +1,19 @@
+# Core UI — built into Python, no install needed
+# tkinter
+
+# Audio capture
+sounddevice
+
+# Numerical audio processing
+numpy
+
+# On-device speech recognition (Whisper)
+faster-whisper
+
+# Note: macOS system tools used at runtime (pre-installed on all Macs):
+#   /usr/bin/say        — text-to-speech + BlackHole output routing
+#   /usr/bin/afconvert  — audio format conversion (Studio tab export)
+#   /usr/bin/afplay     — audio playback (Studio tab preview)
+#
+# Optional virtual microphone (makes Voice Canvas tab visible system-wide):
+#   brew install blackhole-2ch

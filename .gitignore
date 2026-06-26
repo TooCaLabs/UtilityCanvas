@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# PyInstaller build artifacts
+build/
+dist/
+
+# macOS app bundles (built locally, not shipped in repo)
+*.app
+*.dmg
+
+# macOS system files
+.DS_Store
+**/.DS_Store
+
+# External cloned repos used as reference
+UtilityCanvas-main/
+
+# Logs
+*.log
+~/Library/Logs/VocalCanvas/
