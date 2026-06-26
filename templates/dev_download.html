@@ -1,0 +1,55 @@
+{% extends "dev_base.html" %}
+{% block title %}Dev Download | Vocal Canvas{% endblock %}
+{% block content %}
+<div class="page-intro">
+  <h1>Dev Download</h1>
+  <p>Private release staging for installer strategy and package rollout decisions.</p>
+</div>
+
+<div class="home-grid">
+  <article class="info-card">
+    <h2>Internal Release Checklist</h2>
+    <ul>
+      <li>Verify macOS `.dmg` build and launch flow.</li>
+      <li>Validate Windows package and private `.exe` build.</li>
+      <li>Confirm changelog and beta messaging before public publish.</li>
+    </ul>
+  </article>
+
+  <article class="info-card">
+    <h2>Public Safety</h2>
+    <p class="muted">Updates prepared here stay private until you manually apply them to public templates/routes.</p>
+  </article>
+</div>
+
+<hr class="dev-divider">
+
+<div class="page-intro">
+  <h1>Public Download (Private Copy)</h1>
+  <p>Private copy of the public Download page. Add/remove buttons here without affecting public mode.</p>
+</div>
+
+<div class="download-grid">
+  <article class="download-card">
+    <h2>macOS <span aria-hidden="true">&#9733;</span> (Recommended)</h2>
+    <p>Disk image containing <strong>Vocal Canvas.app</strong>.</p>
+    <p class="muted">File: {{ mac_filename }}</p>
+    {% if mac_buildable %}
+    <a class="primary-btn" href="{{ url_for('project_download_macos', v=mac_build_id) }}">Download macOS (.dmg)</a>
+    {% else %}
+    <p class="warning compact">macOS package is not buildable in the current environment.</p>
+    {% endif %}
+  </article>
+
+  <article class="download-card">
+    <h2>Windows (Python Package)</h2>
+    <p>Python package for Windows (script + setup instructions).</p>
+    <p class="muted">File: {{ windows_filename }}</p>
+    {% if windows_buildable %}
+    <a class="primary-btn" href="{{ url_for('project_download_windows', v=windows_build_id) }}">Download Windows (.zip)</a>
+    {% else %}
+    <p class="warning compact">Windows package is not available right now.</p>
+    {% endif %}
+  </article>
+</div>
+{% endblock %}

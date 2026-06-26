@@ -1,0 +1,32 @@
+{% extends "dev_base.html" %}
+{% block title %}Dev Copy Download | Vocal Canvas{% endblock %}
+{% block content %}
+<div class="page-intro">
+  <h1>Download</h1>
+  <p>This is the Dev Mode copy of the public Download tab. Changes here do not affect the public page.</p>
+</div>
+
+<div class="download-grid">
+  <article class="download-card">
+    <h2>macOS <span aria-hidden="true">&#9733;</span> (Recommended)</h2>
+    <p>Disk image containing <strong>Vocal Canvas.app</strong>.</p>
+    <p class="muted">File: {{ mac_filename }}</p>
+    {% if mac_buildable %}
+    <a class="primary-btn" href="{{ url_for('project_download_macos', v=mac_build_id) }}">Download macOS (.dmg)</a>
+    {% else %}
+    <p class="warning compact">macOS package is not buildable in the current environment.</p>
+    {% endif %}
+  </article>
+
+  <article class="download-card">
+    <h2>Windows (Python Package)</h2>
+    <p>Python package for Windows (script + setup instructions).</p>
+    <p class="muted">File: {{ windows_filename }}</p>
+    {% if windows_buildable %}
+    <a class="primary-btn" href="{{ url_for('project_download_windows', v=windows_build_id) }}">Download Windows (.zip)</a>
+    {% else %}
+    <p class="warning compact">Windows package is not available right now.</p>
+    {% endif %}
+  </article>
+</div>
+{% endblock %}

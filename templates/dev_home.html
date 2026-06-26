@@ -1,0 +1,80 @@
+{% extends "dev_base.html" %}
+{% block title %}Dev Home | Vocal Canvas{% endblock %}
+{% block content %}
+<div class="page-intro">
+  <h1>Dev Home</h1>
+  <p>Use this page to stage new Home-tab content before making it public.</p>
+</div>
+
+<div class="home-grid">
+  <article class="info-card">
+    <h2>Draft Zone</h2>
+    <ul>
+      <li>Private feature copy can be written here first.</li>
+      <li>This page is password-protected and not in public tabs.</li>
+      <li>Use it as your internal release preview for v0.2.0.</li>
+    </ul>
+  </article>
+
+  <article class="info-card">
+    <h2>Next Steps</h2>
+    <ul>
+      <li>Add new visuals and release notes here.</li>
+      <li>Validate wording and layout in Dev Mode.</li>
+      <li>Promote approved sections to public pages later.</li>
+    </ul>
+  </article>
+</div>
+
+<hr class="dev-divider">
+
+<div class="page-intro">
+  <h1>Public Home (Private Copy)</h1>
+  <p>Changes below stay private in Dev Mode until you manually move them to public templates.</p>
+</div>
+
+<div class="home-grid">
+  <article class="info-card">
+    <h2>Install on macOS</h2>
+    <ol>
+      <li>Go to the <strong>Download</strong> tab.</li>
+      <li>Download <code>VocalCanvas.dmg</code>.</li>
+      <li>Open the DMG and drag <code>Vocal Canvas.app</code> to <code>Applications</code>.</li>
+      <li>Open the app from <code>Applications</code> (use right-click -> Open on first launch if prompted).</li>
+    </ol>
+  </article>
+
+  <article class="info-card">
+    <h2>Install on Windows</h2>
+    <ol>
+      <li>Go to the <strong>Download</strong> tab.</li>
+      <li>Download <code>VocalCanvasWindows.zip</code> and extract it.</li>
+      <li>Install Python 3.10+ if needed.</li>
+      <li>Run:</li>
+    </ol>
+    <pre><code>pip install -r requirements.txt
+python vocal_canvas_windows.py</code></pre>
+  </article>
+
+  <article class="info-card">
+    <h2>Features</h2>
+    <ul>
+      <li>Multi-page website with Home, Demo, Q&amp;A, and Download tabs</li>
+      <li>Quick online TTS demo preview</li>
+      <li>Desktop app with full controls (voice selection, speed, generation, export)</li>
+      <li>Downloadable macOS and Windows builds</li>
+      <li>Unified dark visual style for site and app</li>
+    </ul>
+  </article>
+
+  <article class="info-card">
+    <h2>What to Expect in Beta</h2>
+    <ul>
+      <li>Frequent design and feature updates</li>
+      <li>Potential installer and first-launch edge cases</li>
+      <li>Some sections still being expanded (including Q&amp;A docs)</li>
+      <li>Rapid bug-fix releases between versions</li>
+    </ul>
+  </article>
+</div>
+{% endblock %}

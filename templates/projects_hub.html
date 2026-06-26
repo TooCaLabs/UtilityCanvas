@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projects Hub</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body data-page="projects-hub">
+  <div class="bg-shape shape-a" aria-hidden="true"></div>
+  <div class="bg-shape shape-b" aria-hidden="true"></div>
+
+  <main class="site-wrap hub-wrap">
+    <header class="site-header hub-header">
+      <p class="hub-kicker">UtilityCanvas</p>
+      <h1 class="hub-title">All Tools</h1>
+      <p class="hub-copy">All helpful tools in one place.</p>
+    </header>
+
+    <section class="page-card">
+      <div class="projects-grid">
+        <article class="project-tile project-tile-featured">
+          <h2>Vocal Canvas</h2>
+          <p>Text-to-speech toolkit with all system voices for free.</p>
+          <div class="project-badges">
+            <span class="project-badge">Active</span>
+            <span class="project-badge">TTS</span>
+          </div>
+          <a class="primary-btn" href="{{ url_for('project_home_page') }}">Open Project</a>
+        </article>
+
+        <article class="project-tile">
+          <h2>Coming soon</h2>
+          <p>More tools coming soon.</p>
+          <div class="project-badges">
+            <span class="project-badge">Upcoming</span>
+          </div>
+          <button class="secondary-btn coming-soon-btn" type="button" data-upcoming-text="Upcoming"><span class="coming-soon-label">Coming Soon...</span></button>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='site.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Dev Mode | Vocal Canvas{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body data-page="dev-{{ active_dev_tab }}">
+  <div class="bg-shape shape-a" aria-hidden="true"></div>
+  <div class="bg-shape shape-b" aria-hidden="true"></div>
+
+  <main class="site-wrap">
+    <header class="site-header">
+      <div class="brand-row">
+        <div class="brand-block">
+          <div class="brand">
+            Vocal Canvas
+            <span class="beta-badge dev-badge">DEV MODE</span>
+          </div>
+          <div class="brand-version">Private preview</div>
+        </div>
+        <div class="header-links dev-header-links">
+          <a class="projects-jump" href="{{ url_for('project_home_page') }}">Public Site</a>
+          <form class="dev-logout-form" method="post" action="{{ url_for('project_dev_logout') }}">
+            <button class="source-jump dev-logout-btn" type="submit">leave dev mode</button>
+          </form>
+        </div>
+      </div>
+
+      <nav class="tabs" aria-label="Dev menu">
+        <a class="tab {% if active_dev_tab == 'home' %}is-active{% endif %}" style="--tab-index: 0;" href="{{ url_for('project_dev_home_page') }}">Dev Home</a>
+        <a class="tab {% if active_dev_tab == 'demo' %}is-active{% endif %}" style="--tab-index: 1;" href="{{ url_for('project_dev_demo_page') }}">Dev Demo</a>
+        <a class="tab {% if active_dev_tab == 'qa' %}is-active{% endif %}" style="--tab-index: 2;" href="{{ url_for('project_dev_qa_page') }}">Dev Q&amp;A</a>
+        <a class="tab {% if active_dev_tab == 'download' %}is-active{% endif %}" style="--tab-index: 3;" href="{{ url_for('project_dev_download_page') }}">Dev Download</a>
+      </nav>
+    </header>
+
+    <section class="page-card dev-card">
+      <p class="dev-banner">Private preview only. Changes in this area are not visible on the public tabs.</p>
+      {% block content %}{% endblock %}
+    </section>
+  </main>
+
+  {% block scripts %}{% endblock %}
+  <script src="{{ url_for('static', filename='site.js') }}"></script>
+</body>
+</html>

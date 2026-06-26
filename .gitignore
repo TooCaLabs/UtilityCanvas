@@ -1,8 +1,14 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
-.Python
+*.pyd
+.pytest_cache/
+.mypy_cache/
 
 # Virtual environments
 .venv/
@@ -17,13 +23,25 @@ dist/
 *.app
 *.dmg
 
-# macOS system files
-.DS_Store
-**/.DS_Store
-
 # External cloned repos used as reference
 UtilityCanvas-main/
 
+# Generated/runtime output (web app)
+generated_audio/
+downloads/*
+!downloads/.gitkeep
+!downloads/VocalCanvas.dmg
+!downloads/VocalCanvasWindows.zip
+!downloads/windows_installer/
+!downloads/windows_installer/README.md
+!downloads/windows_installer/build_windows_exe.bat
+downloads/windows_installer/build/
+downloads/windows_installer/dist/
+downloads/windows_installer/*.spec
+
 # Logs
 *.log
-~/Library/Logs/VocalCanvas/
+
+# IDEs
+.vscode/
+.idea/

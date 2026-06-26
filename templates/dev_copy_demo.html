@@ -1,0 +1,41 @@
+{% extends "dev_base.html" %}
+{% block title %}Dev Copy Demo | Vocal Canvas{% endblock %}
+{% block content %}
+<div class="page-intro">
+  <h1>Demo</h1>
+  <p>This is the Dev Mode copy of the public Demo tab. Public demo stays unchanged.</p>
+</div>
+
+{% if demo_mode == "cloud" %}
+<p class="warning">Online demo mode is active on this host. Full voice controls are in the desktop app.</p>
+{% elif demo_mode == "unavailable" %}
+<p class="warning">Demo audio is currently unavailable on this server.</p>
+{% endif %}
+
+<div class="demo-shell">
+  <div class="field">
+    <label for="text-input">Text (max {{ demo_limit }} chars)</label>
+    <textarea id="text-input">Download Vocal-Canvas today, this is made to help content creators use TextToSpeech easily in their videos!</textarea>
+    <div class="meta-row">
+      <span id="char-count">0 / {{ demo_limit }}</span>
+    </div>
+  </div>
+
+  <button id="generate-btn" type="button" class="primary-btn">Generate Demo Audio</button>
+
+  <p id="status" class="status idle">Ready.</p>
+
+  <div id="loader" class="loader hidden" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <div id="result" class="result hidden">
+    <audio id="audio-player" controls preload="none"></audio>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>window.DEMO_LIMIT = {{ demo_limit }};</script>
+<script>window.DEMO_API_URL = "{{ url_for('project_demo_speak_api') }}";</script>
+<script src="{{ url_for('static', filename='demo.js') }}"></script>
+{% endblock %}

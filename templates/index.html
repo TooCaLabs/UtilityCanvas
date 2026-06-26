@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vocal Canvas</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="bg-shape shape-a" aria-hidden="true"></div>
+  <div class="bg-shape shape-b" aria-hidden="true"></div>
+
+  <main class="page">
+    <section class="hero">
+      <p class="eyebrow">Vocal Canvas</p>
+      <h1>Download the full desktop app, test a quick demo here.</h1>
+      <p class="hero-copy">
+        The complete app is packaged as a single macOS installer. The website keeps only a short,
+        limited demo so visitors can try the voice quality before installing.
+      </p>
+
+      <div class="download-area">
+        <a class="download-btn" href="/download/desktop">Download macOS App (.dmg)</a>
+        <p class="download-note">Includes <strong>Vocal Canvas.app</strong> inside one installer file.</p>
+      </div>
+
+      {% if download_error %}
+      <p class="warning">Desktop package could not be created: {{ download_error }}</p>
+      {% endif %}
+
+      {% if not tools_ready %}
+      <p class="warning">Demo requires macOS commands <code>say</code> and <code>afconvert</code>.</p>
+      {% endif %}
+    </section>
+
+    <section class="demo-card">
+      <div class="demo-head">
+        <h2>Simple Web Demo</h2>
+        <p>Limit: <strong>{{ demo_limit }}</strong> characters</p>
+      </div>
+
+      <div class="field">
+        <label for="text-input">Demo text</label>
+        <textarea id="text-input" placeholder="Type a short sample line..."></textarea>
+        <div class="meta-row">
+          <span id="char-count">0 / {{ demo_limit }}</span>
+          <button id="sample-btn" type="button" class="mini">Use Sample</button>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="field">
+          <label for="voice-select">Voice</label>
+          <select id="voice-select" {% if not voices %}disabled{% endif %}>
+            {% if voices %}
+              {% for voice in voices %}
+              <option value="{{ voice }}" {% if voice == default_voice %}selected{% endif %}>{{ voice }}</option>
+              {% endfor %}
+            {% else %}
+              <option>No voices found</option>
+            {% endif %}
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="rate-input">Speed <span id="rate-value">170</span></label>
+          <input id="rate-input" type="range" min="80" max="400" value="170">
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button id="generate-btn" type="button" class="primary">Generate Demo Audio</button>
+        <button id="clear-btn" type="button" class="secondary">Clear</button>
+      </div>
+
+      <p id="status" class="status idle">Ready.</p>
+
+      <div id="loader" class="loader hidden" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+
+      <div id="result" class="result hidden">
+        <audio id="audio-player" controls preload="none"></audio>
+        <a id="download-link" class="demo-download" href="#" download>Download Demo Audio</a>
+      </div>
+    </section>
+  </main>
+
+  <script>window.DEMO_LIMIT = {{ demo_limit }};</script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{% extends "dev_base.html" %}
+{% block title %}Dev Copy Q&A | Vocal Canvas{% endblock %}
+{% block content %}
+<div class="empty-panel stacked-empty">
+  <h1>Vocal Canvas</h1>
+  <p class="version-note">v0.1.1 (Beta)</p>
+  <p class="empty-copy">This is the Dev Mode copy of the public Q&amp;A tab. You can change this version without affecting public content.</p>
+
+  <div class="qa-template-block">
+    <details class="qa-dropdown">
+      <summary><span class="qa-dropdown-label">Q: Is it <strong>safe</strong>?</span></summary>
+      <div class="qa-dropdown-content">
+        <p><strong>Short answer:</strong> yes, for normal use it is designed to be safe, but it is still a beta build so you should treat it like early software and avoid feeding it sensitive private text.</p>
+        <p>The desktop app is focused on local TextToSpeech workflows and does not require always-on accounts, hidden background services, or automatic downloads. You choose when audio is generated, and you choose when files are exported. That keeps the workflow predictable and creator-friendly.</p>
+        <p>For the website demo, your text is sent to the demo backend to generate the preview audio, so use it for sample lines instead of confidential content. If you want maximum privacy, use the downloadable app for production work. Also make sure you only download builds from the official project links and keep your version updated as beta fixes are released.</p>
+        <p>Long answer: Yes.</p>
+      </div>
+    </details>
+  </div>
+</div>
+{% endblock %}

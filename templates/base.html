@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Vocal Canvas{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body data-page="{{ active_tab }}">
+  <div class="bg-shape shape-a" aria-hidden="true"></div>
+  <div class="bg-shape shape-b" aria-hidden="true"></div>
+
+  <main class="site-wrap">
+    <header class="site-header">
+      <div class="brand-row">
+        <div class="brand-block">
+          <div class="brand">
+            Vocal Canvas
+            <span class="beta-badge">BETA</span>
+          </div>
+          <div class="brand-version">v0.1.1</div>
+        </div>
+        <div class="header-links">
+          <a class="projects-jump" href="{{ url_for('projects_hub') }}">All Projects</a>
+          <a class="source-jump" href="https://github.com/ARealGoldknow/UtilityCanvas" target="_blank" rel="noopener noreferrer">source code (github)</a>
+          {% if dev_mode_enabled %}
+          <a class="source-jump dev-link" href="{{ url_for('project_dev_entry') }}">dev mode</a>
+          {% endif %}
+        </div>
+      </div>
+      <nav class="tabs" aria-label="Main tabs">
+        <a class="tab {% if active_tab == 'home' %}is-active{% endif %}" style="--tab-index: 0;" href="{{ url_for('project_home_page') }}">Home</a>
+        <a class="tab {% if active_tab == 'demo' %}is-active{% endif %}" style="--tab-index: 1;" href="{{ url_for('project_demo_page') }}">Demo</a>
+        <a class="tab {% if active_tab == 'qa' %}is-active{% endif %}" style="--tab-index: 2;" href="{{ url_for('project_qa_page') }}">Q&amp;A</a>
+        <a class="tab {% if active_tab == 'download' %}is-active{% endif %}" style="--tab-index: 3;" href="{{ url_for('project_download_page') }}">Download</a>
+      </nav>
+    </header>
+
+    <section class="page-card">
+      {% block content %}{% endblock %}
+    </section>
+  </main>
+
+  {% block scripts %}{% endblock %}
+  <script src="{{ url_for('static', filename='site.js') }}"></script>
+</body>
+</html>

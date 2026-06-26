@@ -1,0 +1,59 @@
+{% extends "dev_base.html" %}
+{% block title %}Dev Copy Home | Vocal Canvas{% endblock %}
+{% block content %}
+<div class="page-intro">
+  <h1>Vocal Canvas</h1>
+  <p class="version-note">v0.1.1 (Beta)</p>
+  <p class="beta-warning">This is the Dev Mode copy of the public Home tab. Edit freely without affecting public mode.</p>
+</div>
+
+<div class="home-grid">
+  <article class="info-card">
+    <h2>Install on macOS</h2>
+    <ol>
+      <li>Go to the <strong>Download</strong> tab.</li>
+      <li>Download <code>VocalCanvas.dmg</code>.</li>
+      <li>Open the DMG and drag <code>Vocal Canvas.app</code> to <code>Applications</code>.</li>
+      <li>Open the app from <code>Applications</code> (use right-click -> Open on first launch if prompted).</li>
+    </ol>
+  </article>
+
+  <article class="info-card">
+    <h2>Install on Windows</h2>
+    <ol>
+      <li>Go to the <strong>Download</strong> tab.</li>
+      <li>Download <code>VocalCanvasWindows.zip</code> and extract it.</li>
+      <li>Install Python 3.10+ if needed.</li>
+      <li>Run:</li>
+    </ol>
+    <pre><code>pip install -r requirements.txt
+python vocal_canvas_windows.py</code></pre>
+  </article>
+
+  <article class="info-card">
+    <h2>Features</h2>
+    <ul>
+      <li>Multi-page website with Home, Demo, Q&amp;A, and Download tabs</li>
+      <li>Quick online TTS demo preview</li>
+      <li>Desktop app with full controls (voice selection, speed, generation, export)</li>
+      <li>Downloadable macOS and Windows builds</li>
+      <li>Unified dark visual style for site and app</li>
+    </ul>
+  </article>
+
+  <article class="info-card">
+    <h2>What to Expect in Beta</h2>
+    <ul>
+      <li>Frequent design and feature updates</li>
+      <li>Potential installer and first-launch edge cases</li>
+      <li>Some sections still being expanded (including Q&amp;A docs)</li>
+      <li>Rapid bug-fix releases between versions</li>
+    </ul>
+  </article>
+</div>
+
+<div class="muted-note">
+  Dev copy of Home. Public Home is unchanged.
+  <a href="https://github.com/ARealGoldknow/UtilityCanvas" target="_blank" rel="noopener noreferrer">source code (github)</a>
+</div>
+{% endblock %}

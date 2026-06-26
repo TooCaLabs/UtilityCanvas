@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dev Mode Login | Vocal Canvas</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body data-page="dev-login">
+  <div class="bg-shape shape-a" aria-hidden="true"></div>
+  <div class="bg-shape shape-b" aria-hidden="true"></div>
+
+  <main class="site-wrap">
+    <header class="site-header">
+      <div class="brand-row">
+        <div class="brand-block">
+          <div class="brand">
+            Vocal Canvas
+            <span class="beta-badge dev-badge">DEV MODE</span>
+          </div>
+          <div class="brand-version">Private preview login</div>
+        </div>
+        <a class="projects-jump" href="{{ url_for('project_home_page') }}">Back To Public Site</a>
+      </div>
+    </header>
+
+    <section class="page-card dev-card">
+      <div class="page-intro">
+        <h1>Dev Mode Access</h1>
+        <p>Enter your password to access private preview pages.</p>
+      </div>
+
+      <form class="dev-login-form" method="post" action="{{ url_for('project_dev_login_submit') }}">
+        <input type="hidden" name="next" value="{{ next_path }}">
+
+        <label for="dev-password">Password</label>
+        <input id="dev-password" name="password" type="password" autocomplete="current-password" required>
+
+        <button class="primary-btn" type="submit">Enter Dev Mode</button>
+      </form>
+
+      {% if error_message %}
+      <p class="status error">{{ error_message }}</p>
+      {% else %}
+      <p class="status idle">Locked and private.</p>
+      {% endif %}
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='site.js') }}"></script>
+</body>
+</html>
