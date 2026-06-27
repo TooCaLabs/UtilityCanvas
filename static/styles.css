@@ -348,6 +348,40 @@ input[type="text"] {
   color: #d8f4ff;
 }
 
+.blog-section {
+  margin-top: 2rem;
+}
+
+.blog-header {
+  font-size: 1.3rem;
+  color: var(--ink);
+  margin: 0 0 0.8rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.blog-post {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0.9rem 1rem;
+  background: rgba(0, 29, 41, 0.78);
+  box-shadow: 0 9px 18px rgba(0, 0, 0, 0.16);
+  margin-bottom: 0.7rem;
+}
+
+.blog-post h3 {
+  margin: 0 0 0.45rem;
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+.blog-post p {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  font-size: 0.93rem;
+}
+
 .muted-note {
   margin-top: 0.9rem;
   color: var(--ink-soft);

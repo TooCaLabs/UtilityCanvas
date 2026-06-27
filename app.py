@@ -734,7 +734,7 @@ class DesktopApp(tk.Tk):
 
         tab_row = tk.Frame(outer, bg=BG)
         tab_row.grid(row=2, column=0, sticky="ew", pady=(0,10))
-        tabs = [("home","Home"), ("demo","Studio"), ("qa","Q&A"), ("vc","Voice Canvas")]
+        tabs = [("home","Home"), ("demo","Studio"), ("qa","Q&A"), ("vc","V3TS")]
         for i, _ in enumerate(tabs):
             tab_row.grid_columnconfigure(i, weight=1)
         for index, (key, label) in enumerate(tabs):
@@ -890,19 +890,55 @@ class DesktopApp(tk.Tk):
     def _build_vc_page(self, parent: tk.Widget) -> tk.Frame:
         frame = tk.Frame(parent, bg=CARD_INNER)
         frame.grid_columnconfigure(0, weight=1)
-        frame.grid_rowconfigure(4, weight=1)   # transcript expands
+        frame.grid_rowconfigure(5, weight=1)   # transcript expands
 
         # header
         hdr = tk.Frame(frame, bg=CARD_INNER)
-        hdr.grid(row=0, column=0, sticky="ew", pady=(2,10))
-        tk.Label(hdr, text="Voice Canvas", bg=CARD_INNER, fg=TEXT_PRIMARY,
+        hdr.grid(row=0, column=0, sticky="ew", pady=(2,6))
+        tk.Label(hdr, text="V3TS", bg=CARD_INNER, fg=TEXT_PRIMARY,
                  font=("Avenir Next", 20, "bold")).pack(side="left")
         tk.Label(hdr, text="  on-device · real-time", bg=CARD_INNER, fg=TEXT_SECONDARY,
                  font=("Avenir Next", 12)).pack(side="left", pady=(4,0))
 
-        # ── row 1: Voice + Rate ──────────────────────────────────────────────
+        # ── row 1: collapsible info ──────────────────────────────────────────
+        _INFO = (
+            "V3TS (Voice to Text to Speech) listens through your mic, transcribes "
+            "what you say using an on-device Whisper model, then instantly reads it "
+            "back through the selected system voice — with zero cloud round-trips. "
+            "If BlackHole 2ch is installed, the output is also routed to a virtual "
+            "microphone so other apps can pick up the synthesized voice directly."
+        )
+        info_wrap = tk.Frame(frame, bg=CARD_INNER)
+        info_wrap.grid(row=1, column=0, sticky="ew", pady=(0, 6))
+        info_wrap.grid_columnconfigure(0, weight=1)
+
+        self._vc_info_open = False
+        self._vc_info_body = None
+
+        def _toggle_info():
+            self._vc_info_open = not self._vc_info_open
+            arrow_lbl.config(text="▾ What is V3TS?" if self._vc_info_open else "▸ What is V3TS?")
+            if self._vc_info_open:
+                self._vc_info_body = tk.Label(
+                    info_wrap, text=_INFO, bg=_blend(FIELD_BG, BG, 0.4),
+                    fg=TEXT_SECONDARY, font=("Avenir Next", 11),
+                    wraplength=600, justify="left", anchor="w",
+                    padx=10, pady=8)
+                self._vc_info_body.grid(row=1, column=0, sticky="ew", pady=(2,0))
+            else:
+                if self._vc_info_body:
+                    self._vc_info_body.destroy()
+                    self._vc_info_body = None
+
+        arrow_lbl = tk.Label(info_wrap, text="▸ What is V3TS?", bg=CARD_INNER,
+                             fg=TEXT_SECONDARY, font=("Avenir Next", 11),
+                             cursor="hand2")
+        arrow_lbl.grid(row=0, column=0, sticky="w")
+        arrow_lbl.bind("<Button-1>", lambda _: _toggle_info())
+
+        # ── row 2: Voice + Rate ──────────────────────────────────────────────
         row1 = tk.Frame(frame, bg=CARD_INNER)
-        row1.grid(row=1, column=0, sticky="ew", pady=(0,6))
+        row1.grid(row=2, column=0, sticky="ew", pady=(0,6))
         row1.grid_columnconfigure(0, weight=2)
         row1.grid_columnconfigure(1, weight=1)
 
@@ -940,9 +976,9 @@ class DesktopApp(tk.Tk):
         self.vc_rate_var.trace_add("write",
             lambda *_: self.vc_rate_label.config(text=str(self.vc_rate_var.get())))
 
-        # ── row 2: Mic + Model ───────────────────────────────────────────────
+        # ── row 3: Mic + Model ───────────────────────────────────────────────
         row2 = tk.Frame(frame, bg=CARD_INNER)
-        row2.grid(row=2, column=0, sticky="ew", pady=(0,6))
+        row2.grid(row=3, column=0, sticky="ew", pady=(0,6))
         row2.grid_columnconfigure(0, weight=2)
         row2.grid_columnconfigure(1, weight=1)
 
@@ -977,9 +1013,9 @@ class DesktopApp(tk.Tk):
         self.vc_model_var.trace_add("write",
             lambda *_: self.after_idle(self._vc_on_model_change))
 
-        # ── row 3: BlackHole status + volume bar ─────────────────────────────
+        # ── row 4: BlackHole status + volume bar ─────────────────────────────
         row3 = tk.Frame(frame, bg=CARD_INNER)
-        row3.grid(row=3, column=0, sticky="ew", pady=(0,6))
+        row3.grid(row=4, column=0, sticky="ew", pady=(0,6))
         row3.grid_columnconfigure(1, weight=1)
 
         bh_frame = tk.Frame(row3, bg=CARD_INNER)
@@ -998,12 +1034,12 @@ class DesktopApp(tk.Tk):
         self.vc_vol_bar = self.vc_vol_cv.create_rectangle(0, 0, 0, 6,
                                                             fill=BTN_TOP, width=0)
 
-        # ── row 4: Transcript ─────────────────────────────────────────────────
+        # ── row 5: Transcript ─────────────────────────────────────────────────
         tx_card = RoundedGradientCard(frame, radius=16,
             top_color=_blend(FIELD_BG, "#ffffff", 0.07), bottom_color=FIELD_BG,
             border_color=BORDER, content_bg=FIELD_BG, padding=1, shadow_offset=2,
             shadow_color=_blend(SHADOW_COLOR, BG, 0.35))
-        tx_card.grid(row=4, column=0, sticky="nsew")
+        tx_card.grid(row=5, column=0, sticky="nsew")
         tx_card.content.grid_columnconfigure(0, weight=1)
         tx_card.content.grid_rowconfigure(0, weight=1)
 
@@ -1023,9 +1059,9 @@ class DesktopApp(tk.Tk):
         vc_sb.grid(row=0, column=1, sticky="ns", pady=8, padx=(4,6))
         self.vc_text.tag_configure("fresh", foreground=WARNING)
 
-        # ── row 5: action bar ─────────────────────────────────────────────────
+        # ── row 6: action bar ─────────────────────────────────────────────────
         act = tk.Frame(frame, bg=CARD_INNER)
-        act.grid(row=5, column=0, sticky="ew", pady=(8,2))
+        act.grid(row=6, column=0, sticky="ew", pady=(8,2))
         act.grid_columnconfigure(0, weight=1)
 
         sf2 = tk.Frame(act, bg=CARD_INNER)
@@ -1406,6 +1442,17 @@ class DesktopApp(tk.Tk):
 # ── entry ──────────────────────────────────────────────────────────────────────
 
 def main() -> int:
+    import fcntl, atexit
+    _lock_path = Path.home() / "Library" / "Application Support" / "VocalCanvas" / "app.lock"
+    _lock_path.parent.mkdir(parents=True, exist_ok=True)
+    _lock_fd = open(_lock_path, "w")
+    try:
+        fcntl.flock(_lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        subprocess.run(["osascript", "-e", 'tell application "Vocal Canvas" to activate'], check=False)
+        return 0
+    atexit.register(lambda: (fcntl.flock(_lock_fd, fcntl.LOCK_UN), _lock_fd.close()))
+
     log_line("=== Vocal Canvas launch ===")
     try:
         tool_paths = discover_tools()
@@ -1418,7 +1465,7 @@ def main() -> int:
         app = DesktopApp(tool_paths)
         app.mainloop()
         return 0
-    except Exception as exc:
+    except BaseException as exc:
         log_exception("Unhandled exception", exc)
         show_startup_error("Vocal Canvas", f"The app crashed.\n\nLog: {LOG_FILE}")
         return 1
