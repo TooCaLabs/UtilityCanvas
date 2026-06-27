@@ -348,6 +348,68 @@ input[type="text"] {
   color: #d8f4ff;
 }
 
+.hub-back {
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.hub-back:hover { color: var(--ink); }
+
+.project-tile-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feature-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(0, 29, 41, 0.78);
+  overflow: hidden;
+}
+
+.feature-toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  gap: 1rem;
+}
+
+.feature-toggle-title {
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+}
+
+.feature-toggle-arrow {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.feature-body {
+  padding: 0 1rem 0.9rem;
+  color: var(--ink-soft);
+  font-size: 0.93rem;
+  line-height: 1.55;
+  border-top: 1px solid var(--line);
+  padding-top: 0.75rem;
+}
+
 .blog-section {
   margin-top: 2rem;
 }

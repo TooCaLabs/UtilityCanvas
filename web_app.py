@@ -470,6 +470,11 @@ def projects_hub_alias():
     return redirect(url_for("projects_hub"))
 
 
+@app.get("/features")
+def features_page():
+    return render_template("features.html")
+
+
 @app.get(PROJECT_ROOT)
 def project_root_redirect():
     return redirect(url_for("project_home_page"))
