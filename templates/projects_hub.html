@@ -15,6 +15,9 @@
       <p class="hub-kicker">UtilityCanvas</p>
       <h1 class="hub-title">All Tools</h1>
       <p class="hub-copy">All helpful tools in one place.</p>
+      <div class="hub-nav">
+        <a class="secondary-btn" href="{{ url_for('features_page') }}">Features</a>
+      </div>
     </header>
 
     <section class="page-card">
@@ -26,10 +29,7 @@
             <span class="project-badge">Active</span>
             <span class="project-badge">TTS</span>
           </div>
-          <div class="project-tile-actions">
-            <a class="primary-btn" href="{{ url_for('project_home_page') }}">Open Project</a>
-            <a class="secondary-btn" href="{{ url_for('features_page') }}">Features</a>
-          </div>
+          <a class="primary-btn" href="{{ url_for('project_home_page') }}">Open Project</a>
         </article>
 
         <article class="project-tile">

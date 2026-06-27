@@ -348,6 +348,12 @@ input[type="text"] {
   color: #d8f4ff;
 }
 
+.hub-nav {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.6rem;
+}
+
 .hub-back {
   color: var(--ink-soft);
   text-decoration: none;
