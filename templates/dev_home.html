@@ -77,4 +77,55 @@ python vocal_canvas_windows.py</code></pre>
     </ul>
   </article>
 </div>
+
+<section class="blog-section">
+  <h2 class="blog-header">V3TS</h2>
+
+  <article class="blog-post">
+    <h3>What is V3TS?</h3>
+    <p>
+      V3TS (Voice to Text to Speech) is a real-time voice mirror built into the Vocal Canvas desktop app.
+      It listens through your microphone, transcribes what you say using an on-device Whisper model,
+      and instantly reads it back through the selected system voice — all without any cloud round-trips.
+    </p>
+  </article>
+
+  <article class="blog-post">
+    <h3>On-Device Transcription</h3>
+    <p>
+      Transcription runs entirely on your machine using <strong>faster-whisper</strong>, a local
+      implementation of OpenAI's Whisper model. No audio is ever sent to a server.
+      The tiny model delivers around 230ms inference time on a 1-second audio clip, keeping
+      the experience near-instant even when you're talking fast.
+    </p>
+  </article>
+
+  <article class="blog-post">
+    <h3>Feedback Loop Prevention</h3>
+    <p>
+      V3TS automatically mutes the microphone listener while the synthesized voice is playing,
+      plus a 500ms tail to catch acoustic echo. This prevents the app from hearing and re-reading
+      its own TTS output in a loop.
+    </p>
+  </article>
+
+  <article class="blog-post">
+    <h3>Virtual Microphone Output</h3>
+    <p>
+      When <strong>BlackHole 2ch</strong> is installed, V3TS routes the synthesized voice to a
+      virtual microphone visible in macOS System Settings. Any other app — Discord, Zoom, OBS,
+      and more — can select that virtual mic as its input and receive the synthesized voice directly.
+    </p>
+  </article>
+
+  <article class="blog-post">
+    <h3>Configurable Controls</h3>
+    <p>
+      Pick any macOS system voice, set the speaking rate, choose your input microphone, and select
+      the Whisper model size (tiny, base, or small) to trade speed for accuracy. All settings are
+      applied live with no restart required.
+    </p>
+  </article>
+</section>
+
 {% endblock %}
