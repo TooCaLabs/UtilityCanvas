@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>loading name... | UtilityCanvas</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <style>
+    .ln-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .ln-screen-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #000;
+      aspect-ratio: 16/9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .ln-screen-title {
+      font-size: clamp(1rem, 3vw, 1.6rem);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .ln-screen-msg {
+      font-size: clamp(0.7rem, 1.5vw, 0.95rem);
+      color: #aaa;
+      margin-bottom: 1.2rem;
+      text-align: center;
+      min-height: 1.4em;
+    }
+    .ln-bar-track {
+      width: 80%;
+      height: 8px;
+      background: #222;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .ln-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 99px;
+      background: var(--accent, #0b85c8);
+      transition: width 0.4s ease;
+    }
+    .ln-pct {
+      font-size: 0.75rem;
+      color: #555;
+      margin-top: 0.5rem;
+    }
+    .ln-screen-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+    }
+    .ln-options-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(0,29,41,0.78);
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .ln-options-card h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--ink);
+    }
+    .ln-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .ln-field label {
+      font-size: 0.85rem;
+      color: var(--ink-soft);
+    }
+    .ln-field input, .ln-field select {
+      background: rgba(0,17,62,0.75);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink);
+      padding: 0.4rem 0.6rem;
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+    }
+    .ln-field input:focus, .ln-field select:focus {
+      border-color: #0b85c8;
+    }
+    .ln-color-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .ln-color-row input[type=color] {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: none;
+      cursor: pointer;
+      padding: 2px;
+    }
+    .ln-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .ln-toggle-row label {
+      font-size: 0.85rem;
+      color: var(--ink-soft);
+    }
+    .ln-toggle {
+      width: 38px;
+      height: 22px;
+      background: #222;
+      border-radius: 99px;
+      border: 1px solid var(--line);
+      position: relative;
+      cursor: pointer;
+      appearance: none;
+      transition: background 0.2s;
+    }
+    .ln-toggle:checked { background: #0b85c8; border-color: #0b85c8; }
+    .ln-toggle::after {
+      content: '';
+      position: absolute;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      top: 2px; left: 2px;
+      transition: left 0.2s;
+    }
+    .ln-toggle:checked::after { left: 18px; }
+    @media (max-width: 700px) {
+      .ln-wrap { grid-template-columns: 1fr; }
+    }
+
+    /* fullscreen overlay */
+    .ln-fullscreen-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .ln-fullscreen-overlay.active { display: flex; }
+    .ln-fs-title {
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .ln-fs-msg {
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      color: #aaa;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .ln-fs-bar-track {
+      width: 60%;
+      height: 12px;
+      background: #222;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .ln-fs-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 99px;
+      background: #0b85c8;
+      transition: width 0.4s ease;
+    }
+    .ln-fs-pct {
+      font-size: 1rem;
+      color: #555;
+      margin-top: 0.6rem;
+    }
+    .ln-fs-exit {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: none;
+      border: 1px solid #333;
+      color: #555;
+      border-radius: 8px;
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .ln-fs-exit:hover { color: #fff; border-color: #666; }
+  </style>
+</head>
+<body data-page="fun">
+  <div class="bg-shape shape-a" aria-hidden="true"></div>
+  <div class="bg-shape shape-b" aria-hidden="true"></div>
+
+  <main class="site-wrap hub-wrap">
+    <header class="site-header hub-header">
+      <p class="hub-kicker"><a href="/" class="hub-back">← UtilityCanvas</a></p>
+      <h1 class="hub-title">loading name...</h1>
+      <p class="hub-copy">A fake loading screen. For reasons.</p>
+    </header>
+
+    <div class="ln-wrap">
+
+      <!-- Screen preview -->
+      <div>
+        <div class="ln-screen-card" id="ln-preview">
+          <div class="ln-screen-title" id="ln-preview-title">Initializing...</div>
+          <div class="ln-screen-msg" id="ln-preview-msg">Please wait</div>
+          <div class="ln-bar-track">
+            <div class="ln-bar-fill" id="ln-preview-bar"></div>
+          </div>
+          <div class="ln-pct" id="ln-preview-pct">0%</div>
+        </div>
+        <div class="ln-screen-actions">
+          <button class="primary-btn" id="ln-fullscreen-btn" type="button">⛶ Fullscreen</button>
+          <button class="secondary-btn" id="ln-download-btn" type="button">↓ Download</button>
+          <button class="secondary-btn" id="ln-restart-btn" type="button">↺ Restart</button>
+        </div>
+      </div>
+
+      <!-- Options -->
+      <div class="ln-options-card">
+        <h2>Options</h2>
+
+        <div class="ln-field">
+          <label for="ln-title-input">Title</label>
+          <input id="ln-title-input" type="text" value="Initializing..." maxlength="60">
+        </div>
+
+        <div class="ln-field">
+          <label for="ln-speed">Speed</label>
+          <select id="ln-speed">
+            <option value="slow">Slow</option>
+            <option value="normal" selected>Normal</option>
+            <option value="fast">Fast</option>
+            <option value="ludicrous">Ludicrous</option>
+          </select>
+        </div>
+
+        <div class="ln-field">
+          <label>Bar color</label>
+          <div class="ln-color-row">
+            <input type="color" id="ln-color" value="#0b85c8">
+            <span style="font-size:0.8rem;color:var(--ink-soft);">Pick any color</span>
+          </div>
+        </div>
+
+        <div class="ln-toggle-row">
+          <label for="ln-random-msgs">Random absurd messages</label>
+          <input type="checkbox" class="ln-toggle" id="ln-random-msgs" checked>
+        </div>
+
+        <div class="ln-toggle-row">
+          <label for="ln-fake-errors">Fake errors mid-load</label>
+          <input type="checkbox" class="ln-toggle" id="ln-fake-errors" checked>
+        </div>
+
+        <div class="ln-field" id="ln-custom-msgs-field">
+          <label for="ln-custom-msgs">Custom messages (one per line)</label>
+          <textarea id="ln-custom-msgs" rows="4" style="background:rgba(0,17,62,0.75);border:1px solid var(--line);border-radius:8px;color:var(--ink);padding:0.4rem 0.6rem;font-size:0.85rem;font-family:inherit;resize:vertical;outline:none;" placeholder="Leave blank to use built-in messages"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Fullscreen overlay -->
+  <div class="ln-fullscreen-overlay" id="ln-fs">
+    <button class="ln-fs-exit" id="ln-fs-exit">✕ Exit</button>
+    <div class="ln-fs-title" id="ln-fs-title">Initializing...</div>
+    <div class="ln-fs-msg" id="ln-fs-msg">Please wait</div>
+    <div class="ln-fs-bar-track">
+      <div class="ln-fs-bar-fill" id="ln-fs-bar"></div>
+    </div>
+    <div class="ln-fs-pct" id="ln-fs-pct">0%</div>
+  </div>
+
+  <script>
+    const MESSAGES = [
+      "Downloading more RAM…",
+      "Deleting System32…",
+      "Converting oxygen to CO2…",
+      "Reticulating splines…",
+      "Negotiating with servers…",
+      "Pretending to work…",
+      "Calculating the meaning of life…",
+      "Warming up the hamsters…",
+      "Syncing with the moon…",
+      "Bribing the firewall…",
+      "Untangling ethernet cables…",
+      "Overclocking the toaster…",
+      "Installing drivers from 2003…",
+      "Generating random numbers… (not that random)…",
+      "Compressing the internet…",
+      "Asking ChatGPT for help…",
+      "Googling the error message…",
+      "Defragmenting your soul…",
+      "Mining cryptocurrency in background…",
+      "Teaching AI to feel…",
+      "Reversing the polarity…",
+      "Rerouting through proxy…",
+      "Hacking the mainframe…",
+      "Blaming the intern…",
+      "Turning it off and on again…",
+      "Upgrading to Windows 12…",
+      "Downloading the cloud…",
+      "Uploading your browsing history…",
+      "Charging the flux capacitor…",
+    ];
+
+    const ERRORS = [
+      "ERROR: Too much swag detected. Continuing anyway…",
+      "WARNING: Vibes misaligned. Recalibrating…",
+      "CRITICAL: Coffee levels low. Proceeding at reduced capacity…",
+      "ERROR 404: Motivation not found. Faking it…",
+      "BSOD avoided (barely)…",
+      "Kernel panic suppressed. You're welcome…",
+    ];
+
+    const speedMap = { slow: 120, normal: 60, fast: 25, ludicrous: 8 };
+
+    let pct = 0;
+    let interval = null;
+    let msgQueue = [];
+    let msgIdx = 0;
+    let currentMsg = "Please wait";
+
+    function getMessages() {
+      const custom = document.getElementById('ln-custom-msgs').value.trim();
+      if (custom) return custom.split('\n').filter(l => l.trim());
+      return document.getElementById('ln-random-msgs').checked ? [...MESSAGES] : ["Loading…"];
+    }
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function setBar(p) {
+      document.getElementById('ln-preview-bar').style.width = p + '%';
+      document.getElementById('ln-preview-pct').textContent = p + '%';
+      document.getElementById('ln-fs-bar').style.width = p + '%';
+      document.getElementById('ln-fs-pct').textContent = p + '%';
+    }
+
+    function setMsg(msg) {
+      currentMsg = msg;
+      document.getElementById('ln-preview-msg').textContent = msg;
+      document.getElementById('ln-fs-msg').textContent = msg;
+    }
+
+    function setTitle(t) {
+      document.getElementById('ln-preview-title').textContent = t;
+      document.getElementById('ln-fs-title').textContent = t;
+    }
+
+    function startLoad() {
+      clearInterval(interval);
+      pct = 0;
+      msgQueue = shuffle(getMessages());
+      msgIdx = 0;
+      setBar(0);
+      setMsg(msgQueue[0] || 'Loading…');
+      setTitle(document.getElementById('ln-title-input').value || 'Loading…');
+      document.getElementById('ln-preview-bar').style.background = document.getElementById('ln-color').value;
+      document.getElementById('ln-fs-bar').style.background = document.getElementById('ln-color').value;
+
+      const speed = speedMap[document.getElementById('ln-speed').value] || 60;
+      const useFakeErrors = document.getElementById('ln-fake-errors').checked;
+      let stuckAt = null;
+      let stuckCount = 0;
+
+      interval = setInterval(() => {
+        // random stall or fake error
+        if (useFakeErrors && stuckAt === null && pct > 10 && pct < 90 && Math.random() < 0.004) {
+          stuckAt = pct;
+          stuckCount = Math.floor(Math.random() * 18) + 8;
+          setMsg(ERRORS[Math.floor(Math.random() * ERRORS.length)]);
+          return;
+        }
+        if (stuckAt !== null) {
+          stuckCount--;
+          if (stuckCount <= 0) stuckAt = null;
+          else return;
+        }
+
+        // advance
+        const step = Math.random() * 2.5 + 0.3;
+        pct = Math.min(100, pct + step);
+        setBar(Math.round(pct));
+
+        // rotate messages
+        const msgAt = Math.floor(pct / (100 / msgQueue.length));
+        if (msgAt !== msgIdx && msgAt < msgQueue.length) {
+          msgIdx = msgAt;
+          setMsg(msgQueue[msgIdx]);
+        }
+
+        if (pct >= 100) {
+          clearInterval(interval);
+          setMsg('Done.');
+        }
+      }, speed);
+    }
+
+    // wire controls
+    document.getElementById('ln-title-input').addEventListener('input', () =>
+      setTitle(document.getElementById('ln-title-input').value || 'Loading…'));
+    document.getElementById('ln-color').addEventListener('input', e => {
+      document.getElementById('ln-preview-bar').style.background = e.target.value;
+      document.getElementById('ln-fs-bar').style.background = e.target.value;
+    });
+    document.getElementById('ln-restart-btn').addEventListener('click', startLoad);
+    document.getElementById('ln-fullscreen-btn').addEventListener('click', () => {
+      document.getElementById('ln-fs').classList.add('active');
+      startLoad();
+    });
+    document.getElementById('ln-fs-exit').addEventListener('click', () => {
+      document.getElementById('ln-fs').classList.remove('active');
+      clearInterval(interval);
+      startLoad();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.getElementById('ln-fs-exit').click();
+      if (e.key === 'F11') { e.preventDefault(); document.getElementById('ln-fullscreen-btn').click(); }
+    });
+
+    // download as screenshot via canvas
+    document.getElementById('ln-download-btn').addEventListener('click', async () => {
+      try {
+        const { default: html2canvas } = await import('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.esm.js');
+        const canvas = await html2canvas(document.getElementById('ln-preview'), { backgroundColor: '#000' });
+        const a = document.createElement('a'); a.download = 'loading-screen.png';
+        a.href = canvas.toDataURL(); a.click();
+      } catch {
+        alert('Download requires an internet connection to load the screenshot library.');
+      }
+    });
+
+    startLoad();
+  </script>
+  <script src="/static/site.js"></script>
+</body>
+</html>
