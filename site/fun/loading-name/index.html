@@ -50,8 +50,7 @@
       height: 100%;
       width: 0%;
       border-radius: 99px;
-      background: var(--accent, #0b85c8);
-      transition: width 0.4s ease;
+      background: #0b85c8;
     }
     .ln-pct {
       font-size: 0.75rem;
@@ -62,6 +61,7 @@
       display: flex;
       gap: 0.5rem;
       margin-top: 0.8rem;
+      flex-wrap: wrap;
     }
     .ln-options-card {
       border: 1px solid var(--line);
@@ -70,12 +70,23 @@
       padding: 1.2rem;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.9rem;
+      overflow-y: auto;
+      max-height: 70vh;
     }
     .ln-options-card h2 {
       margin: 0;
       font-size: 1.1rem;
       color: var(--ink);
+    }
+    .ln-section-divider {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-soft);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 0.3rem;
+      margin-top: 0.3rem;
     }
     .ln-field {
       display: flex;
@@ -86,7 +97,7 @@
       font-size: 0.85rem;
       color: var(--ink-soft);
     }
-    .ln-field input, .ln-field select {
+    .ln-field input, .ln-field select, .ln-field textarea {
       background: rgba(0,17,62,0.75);
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -96,7 +107,7 @@
       font-family: inherit;
       outline: none;
     }
-    .ln-field input:focus, .ln-field select:focus {
+    .ln-field input:focus, .ln-field select:focus, .ln-field textarea:focus {
       border-color: #0b85c8;
     }
     .ln-color-row {
@@ -132,6 +143,7 @@
       cursor: pointer;
       appearance: none;
       transition: background 0.2s;
+      flex-shrink: 0;
     }
     .ln-toggle:checked { background: #0b85c8; border-color: #0b85c8; }
     .ln-toggle::after {
@@ -144,11 +156,33 @@
       transition: left 0.2s;
     }
     .ln-toggle:checked::after { left: 18px; }
+
+    /* easing graph */
+    .ln-graph-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .ln-graph-canvas {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(0,17,62,0.75);
+      cursor: crosshair;
+      width: 100%;
+      aspect-ratio: 1;
+      display: block;
+    }
+    .ln-graph-hint {
+      font-size: 0.75rem;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
     @media (max-width: 700px) {
       .ln-wrap { grid-template-columns: 1fr; }
     }
 
-    /* fullscreen overlay */
+    /* fullscreen */
     .ln-fullscreen-overlay {
       display: none;
       position: fixed;
@@ -185,17 +219,11 @@
       width: 0%;
       border-radius: 99px;
       background: #0b85c8;
-      transition: width 0.4s ease;
     }
-    .ln-fs-pct {
-      font-size: 1rem;
-      color: #555;
-      margin-top: 0.6rem;
-    }
+    .ln-fs-pct { font-size: 1rem; color: #555; margin-top: 0.6rem; }
     .ln-fs-exit {
       position: absolute;
-      top: 1.5rem;
-      right: 1.5rem;
+      top: 1.5rem; right: 1.5rem;
       background: none;
       border: 1px solid #333;
       color: #555;
@@ -241,6 +269,8 @@
       <div class="ln-options-card">
         <h2>Options</h2>
 
+        <div class="ln-section-divider">General</div>
+
         <div class="ln-field">
           <label for="ln-title-input">Title</label>
           <input id="ln-title-input" type="text" value="Initializing..." maxlength="60">
@@ -274,12 +304,38 @@
           <input type="checkbox" class="ln-toggle" id="ln-fake-errors" checked>
         </div>
 
-        <div class="ln-field" id="ln-custom-msgs-field">
+        <div class="ln-field">
           <label for="ln-custom-msgs">Custom messages (one per line)</label>
-          <textarea id="ln-custom-msgs" rows="4" style="background:rgba(0,17,62,0.75);border:1px solid var(--line);border-radius:8px;color:var(--ink);padding:0.4rem 0.6rem;font-size:0.85rem;font-family:inherit;resize:vertical;outline:none;" placeholder="Leave blank to use built-in messages"></textarea>
+          <textarea id="ln-custom-msgs" rows="3" placeholder="Leave blank to use built-in messages"></textarea>
         </div>
-      </div>
 
+        <div class="ln-section-divider">Easing</div>
+
+        <div class="ln-field">
+          <label for="ln-easing-preset">Preset</label>
+          <select id="ln-easing-preset">
+            <option value="linear">Linear</option>
+            <option value="easeInQuad">Ease In</option>
+            <option value="easeOutQuad" selected>Ease Out</option>
+            <option value="easeInOutQuad">Ease In Out</option>
+            <option value="easeInCubic">Ease In Cubic</option>
+            <option value="easeOutCubic">Ease Out Cubic</option>
+            <option value="easeInOutCubic">Ease In Out Cubic</option>
+            <option value="easeOutBounce">Bounce Out</option>
+            <option value="easeOutElastic">Elastic Out</option>
+            <option value="easeInBack">Back In (overshoot)</option>
+            <option value="stepped3">Stepped (3)</option>
+            <option value="stepped6">Stepped (6)</option>
+            <option value="custom">Custom Bezier</option>
+          </select>
+        </div>
+
+        <div class="ln-graph-wrap">
+          <canvas id="ln-graph" class="ln-graph-canvas" width="200" height="200"></canvas>
+          <p class="ln-graph-hint" id="ln-graph-hint">Drag the handles to edit the curve</p>
+        </div>
+
+      </div>
     </div>
   </main>
 
@@ -295,171 +351,376 @@
   </div>
 
   <script>
-    const MESSAGES = [
-      "Downloading more RAM…",
-      "Deleting System32…",
-      "Converting oxygen to CO2…",
-      "Reticulating splines…",
-      "Negotiating with servers…",
-      "Pretending to work…",
-      "Calculating the meaning of life…",
-      "Warming up the hamsters…",
-      "Syncing with the moon…",
-      "Bribing the firewall…",
-      "Untangling ethernet cables…",
-      "Overclocking the toaster…",
-      "Installing drivers from 2003…",
-      "Generating random numbers… (not that random)…",
-      "Compressing the internet…",
-      "Asking ChatGPT for help…",
-      "Googling the error message…",
-      "Defragmenting your soul…",
-      "Mining cryptocurrency in background…",
-      "Teaching AI to feel…",
-      "Reversing the polarity…",
-      "Rerouting through proxy…",
-      "Hacking the mainframe…",
-      "Blaming the intern…",
-      "Turning it off and on again…",
-      "Upgrading to Windows 12…",
-      "Downloading the cloud…",
-      "Uploading your browsing history…",
-      "Charging the flux capacitor…",
-    ];
+  // ── Easing functions ────────────────────────────────────────────────────────
+  const EASINGS = {
+    linear:          t => t,
+    easeInQuad:      t => t * t,
+    easeOutQuad:     t => t * (2 - t),
+    easeInOutQuad:   t => t < 0.5 ? 2*t*t : -1+(4-2*t)*t,
+    easeInCubic:     t => t * t * t,
+    easeOutCubic:    t => (--t) * t * t + 1,
+    easeInOutCubic:  t => t < 0.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1,
+    easeOutBounce:   t => {
+      if (t < 1/2.75) return 7.5625*t*t;
+      if (t < 2/2.75) return 7.5625*(t-=1.5/2.75)*t+0.75;
+      if (t < 2.5/2.75) return 7.5625*(t-=2.25/2.75)*t+0.9375;
+      return 7.5625*(t-=2.625/2.75)*t+0.984375;
+    },
+    easeOutElastic:  t => {
+      if (t === 0 || t === 1) return t;
+      return Math.pow(2,-10*t)*Math.sin((t-0.075)*(2*Math.PI)/0.3)+1;
+    },
+    easeInBack:      t => { const c = 1.70158; return t*t*((c+1)*t-c); },
+    stepped3:        t => Math.min(1, Math.floor(t * 3) / 3),
+    stepped6:        t => Math.min(1, Math.floor(t * 6) / 6),
+  };
 
-    const ERRORS = [
-      "ERROR: Too much swag detected. Continuing anyway…",
-      "WARNING: Vibes misaligned. Recalibrating…",
-      "CRITICAL: Coffee levels low. Proceeding at reduced capacity…",
-      "ERROR 404: Motivation not found. Faking it…",
-      "BSOD avoided (barely)…",
-      "Kernel panic suppressed. You're welcome…",
-    ];
-
-    const speedMap = { slow: 120, normal: 60, fast: 25, ludicrous: 8 };
-
-    let pct = 0;
-    let interval = null;
-    let msgQueue = [];
-    let msgIdx = 0;
-    let currentMsg = "Please wait";
-
-    function getMessages() {
-      const custom = document.getElementById('ln-custom-msgs').value.trim();
-      if (custom) return custom.split('\n').filter(l => l.trim());
-      return document.getElementById('ln-random-msgs').checked ? [...MESSAGES] : ["Loading…"];
-    }
-
-    function shuffle(arr) {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
+  // ── Cubic bezier solver (like CSS cubic-bezier) ─────────────────────────────
+  function cubicBezier(p1x, p1y, p2x, p2y) {
+    return function(t) {
+      // numerical solve for x, return y
+      function B(t, p1, p2) {
+        return 3*(1-t)*(1-t)*t*p1 + 3*(1-t)*t*t*p2 + t*t*t;
       }
-      return arr;
-    }
-
-    function setBar(p) {
-      document.getElementById('ln-preview-bar').style.width = p + '%';
-      document.getElementById('ln-preview-pct').textContent = p + '%';
-      document.getElementById('ln-fs-bar').style.width = p + '%';
-      document.getElementById('ln-fs-pct').textContent = p + '%';
-    }
-
-    function setMsg(msg) {
-      currentMsg = msg;
-      document.getElementById('ln-preview-msg').textContent = msg;
-      document.getElementById('ln-fs-msg').textContent = msg;
-    }
-
-    function setTitle(t) {
-      document.getElementById('ln-preview-title').textContent = t;
-      document.getElementById('ln-fs-title').textContent = t;
-    }
-
-    function startLoad() {
-      clearInterval(interval);
-      pct = 0;
-      msgQueue = shuffle(getMessages());
-      msgIdx = 0;
-      setBar(0);
-      setMsg(msgQueue[0] || 'Loading…');
-      setTitle(document.getElementById('ln-title-input').value || 'Loading…');
-      document.getElementById('ln-preview-bar').style.background = document.getElementById('ln-color').value;
-      document.getElementById('ln-fs-bar').style.background = document.getElementById('ln-color').value;
-
-      const speed = speedMap[document.getElementById('ln-speed').value] || 60;
-      const useFakeErrors = document.getElementById('ln-fake-errors').checked;
-      let stuckAt = null;
-      let stuckCount = 0;
-
-      interval = setInterval(() => {
-        // random stall or fake error
-        if (useFakeErrors && stuckAt === null && pct > 10 && pct < 90 && Math.random() < 0.004) {
-          stuckAt = pct;
-          stuckCount = Math.floor(Math.random() * 18) + 8;
-          setMsg(ERRORS[Math.floor(Math.random() * ERRORS.length)]);
-          return;
-        }
-        if (stuckAt !== null) {
-          stuckCount--;
-          if (stuckCount <= 0) stuckAt = null;
-          else return;
-        }
-
-        // advance
-        const step = Math.random() * 2.5 + 0.3;
-        pct = Math.min(100, pct + step);
-        setBar(Math.round(pct));
-
-        // rotate messages
-        const msgAt = Math.floor(pct / (100 / msgQueue.length));
-        if (msgAt !== msgIdx && msgAt < msgQueue.length) {
-          msgIdx = msgAt;
-          setMsg(msgQueue[msgIdx]);
-        }
-
-        if (pct >= 100) {
-          clearInterval(interval);
-          setMsg('Done.');
-        }
-      }, speed);
-    }
-
-    // wire controls
-    document.getElementById('ln-title-input').addEventListener('input', () =>
-      setTitle(document.getElementById('ln-title-input').value || 'Loading…'));
-    document.getElementById('ln-color').addEventListener('input', e => {
-      document.getElementById('ln-preview-bar').style.background = e.target.value;
-      document.getElementById('ln-fs-bar').style.background = e.target.value;
-    });
-    document.getElementById('ln-restart-btn').addEventListener('click', startLoad);
-    document.getElementById('ln-fullscreen-btn').addEventListener('click', () => {
-      document.getElementById('ln-fs').classList.add('active');
-      startLoad();
-    });
-    document.getElementById('ln-fs-exit').addEventListener('click', () => {
-      document.getElementById('ln-fs').classList.remove('active');
-      clearInterval(interval);
-      startLoad();
-    });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') document.getElementById('ln-fs-exit').click();
-      if (e.key === 'F11') { e.preventDefault(); document.getElementById('ln-fullscreen-btn').click(); }
-    });
-
-    // download as screenshot via canvas
-    document.getElementById('ln-download-btn').addEventListener('click', async () => {
-      try {
-        const { default: html2canvas } = await import('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.esm.js');
-        const canvas = await html2canvas(document.getElementById('ln-preview'), { backgroundColor: '#000' });
-        const a = document.createElement('a'); a.download = 'loading-screen.png';
-        a.href = canvas.toDataURL(); a.click();
-      } catch {
-        alert('Download requires an internet connection to load the screenshot library.');
+      let lo = 0, hi = 1, mt = t;
+      for (let i = 0; i < 12; i++) {
+        const x = B(mt, p1x, p2x) - t;
+        if (Math.abs(x) < 0.0001) break;
+        if (x > 0) hi = mt; else lo = mt;
+        mt = (lo + hi) / 2;
       }
-    });
+      return B(mt, p1y, p2y);
+    };
+  }
 
+  // Control points for custom bezier [p1x, p1y, p2x, p2y]
+  let customBezier = [0.25, 0.1, 0.25, 1.0];
+
+  // Preset → bezier control points (for graph display)
+  const PRESET_BEZIER = {
+    linear:         [0, 0, 1, 1],
+    easeInQuad:     [0.55, 0, 1, 0.45],
+    easeOutQuad:    [0, 0.55, 0.45, 1],
+    easeInOutQuad:  [0.45, 0, 0.55, 1],
+    easeInCubic:    [0.55, 0.055, 0.675, 0.19],
+    easeOutCubic:   [0.215, 0.61, 0.355, 1],
+    easeInOutCubic: [0.645, 0.045, 0.355, 1],
+    easeOutBounce:  null,
+    easeOutElastic: null,
+    easeInBack:     [0.6, -0.28, 0.735, 0.045],
+    stepped3:       null,
+    stepped6:       null,
+    custom:         null,
+  };
+
+  function getEaseFn() {
+    const preset = document.getElementById('ln-easing-preset').value;
+    if (preset === 'custom') return cubicBezier(...customBezier);
+    return EASINGS[preset] || EASINGS.linear;
+  }
+
+  // ── Graph editor ────────────────────────────────────────────────────────────
+  const graphCanvas = document.getElementById('ln-graph');
+  const ctx = graphCanvas.getContext('2d');
+  const W = 200, H = 200, PAD = 20;
+  const GW = W - PAD*2, GH = H - PAD*2;
+
+  function toCanvas(nx, ny) {
+    return [PAD + nx * GW, PAD + (1 - ny) * GH];
+  }
+  function fromCanvas(cx, cy) {
+    return [(cx - PAD) / GW, 1 - (cy - PAD) / GH];
+  }
+
+  let handles = [
+    { x: 0.25, y: 0.1 },   // P1
+    { x: 0.25, y: 1.0 },   // P2
+  ];
+  let dragging = null;
+  let isCustom = false;
+
+  function drawGraph() {
+    ctx.clearRect(0, 0, W, H);
+
+    // grid
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++) {
+      const x = PAD + (i/4)*GW, y = PAD + (i/4)*GH;
+      ctx.beginPath(); ctx.moveTo(x, PAD); ctx.lineTo(x, PAD+GH); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(PAD+GW, y); ctx.stroke();
+    }
+
+    // axes
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(PAD, PAD, GW, GH);
+
+    const preset = document.getElementById('ln-easing-preset').value;
+    const color = document.getElementById('ln-color').value;
+
+    // handle lines (only in custom mode)
+    if (isCustom) {
+      const [p0x, p0y] = toCanvas(0, 0);
+      const [p1x, p1y] = toCanvas(handles[0].x, handles[0].y);
+      const [p2x, p2y] = toCanvas(handles[1].x, handles[1].y);
+      const [p3x, p3y] = toCanvas(1, 1);
+      ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.moveTo(p0x, p0y); ctx.lineTo(p1x, p1y); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(p3x, p3y); ctx.lineTo(p2x, p2y); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // curve
+    const easeFn = getEaseFn();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let i = 0; i <= 120; i++) {
+      const t = i / 120;
+      const v = Math.max(-0.15, Math.min(1.15, easeFn(t)));
+      const [cx, cy] = toCanvas(t, v);
+      i === 0 ? ctx.moveTo(cx, cy) : ctx.lineTo(cx, cy);
+    }
+    ctx.stroke();
+
+    // fixed anchor points
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    const [ax, ay] = toCanvas(0, 0); ctx.beginPath(); ctx.arc(ax, ay, 4, 0, Math.PI*2); ctx.fill();
+    const [bx, by] = toCanvas(1, 1); ctx.beginPath(); ctx.arc(bx, by, 4, 0, Math.PI*2); ctx.fill();
+
+    // draggable handles (custom mode only)
+    if (isCustom) {
+      handles.forEach((h, i) => {
+        const [hx, hy] = toCanvas(h.x, h.y);
+        ctx.fillStyle = color;
+        ctx.beginPath(); ctx.arc(hx, hy, 6, 0, Math.PI*2); ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      });
+    }
+  }
+
+  function getHandleAt(cx, cy) {
+    for (let i = 0; i < handles.length; i++) {
+      const [hx, hy] = toCanvas(handles[i].x, handles[i].y);
+      if (Math.hypot(cx - hx, cy - hy) < 10) return i;
+    }
+    return null;
+  }
+
+  function getCanvasPos(e) {
+    const rect = graphCanvas.getBoundingClientRect();
+    const scaleX = W / rect.width, scaleY = H / rect.height;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return [(clientX - rect.left) * scaleX, (clientY - rect.top) * scaleY];
+  }
+
+  graphCanvas.addEventListener('mousedown', e => {
+    if (!isCustom) return;
+    const [cx, cy] = getCanvasPos(e);
+    dragging = getHandleAt(cx, cy);
+  });
+  graphCanvas.addEventListener('touchstart', e => {
+    if (!isCustom) return;
+    e.preventDefault();
+    const [cx, cy] = getCanvasPos(e);
+    dragging = getHandleAt(cx, cy);
+  }, { passive: false });
+
+  function onMove(e) {
+    if (dragging === null || !isCustom) return;
+    const [cx, cy] = getCanvasPos(e);
+    let [nx, ny] = fromCanvas(cx, cy);
+    nx = Math.max(0, Math.min(1, nx));
+    ny = Math.max(-0.15, Math.min(1.15, ny));
+    handles[dragging] = { x: nx, y: ny };
+    customBezier = [handles[0].x, handles[0].y, handles[1].x, handles[1].y];
+    drawGraph();
+  }
+  graphCanvas.addEventListener('mousemove', onMove);
+  graphCanvas.addEventListener('touchmove', e => { e.preventDefault(); onMove(e); }, { passive: false });
+  window.addEventListener('mouseup', () => { dragging = null; });
+  window.addEventListener('touchend', () => { dragging = null; });
+
+  document.getElementById('ln-easing-preset').addEventListener('change', () => {
+    const preset = document.getElementById('ln-easing-preset').value;
+    isCustom = preset === 'custom';
+    document.getElementById('ln-graph-hint').textContent = isCustom
+      ? 'Drag the handles to edit the curve'
+      : 'Select "Custom Bezier" to edit';
+
+    // sync handles to preset bezier if available
+    const bp = PRESET_BEZIER[preset];
+    if (bp) {
+      handles = [{ x: bp[0], y: bp[1] }, { x: bp[2], y: bp[3] }];
+    }
+    drawGraph();
     startLoad();
+  });
+
+  // ── Messages / Errors ───────────────────────────────────────────────────────
+  const MESSAGES = [
+    "Downloading more RAM…","Deleting System32…","Converting oxygen to CO2…",
+    "Reticulating splines…","Negotiating with servers…","Pretending to work…",
+    "Calculating the meaning of life…","Warming up the hamsters…",
+    "Syncing with the moon…","Bribing the firewall…","Untangling ethernet cables…",
+    "Overclocking the toaster…","Installing drivers from 2003…",
+    "Generating random numbers… (not that random)…","Compressing the internet…",
+    "Asking ChatGPT for help…","Googling the error message…",
+    "Defragmenting your soul…","Mining cryptocurrency in background…",
+    "Teaching AI to feel…","Reversing the polarity…","Rerouting through proxy…",
+    "Hacking the mainframe…","Blaming the intern…","Turning it off and on again…",
+    "Upgrading to Windows 12…","Downloading the cloud…",
+    "Uploading your browsing history…","Charging the flux capacitor…",
+  ];
+  const ERRORS = [
+    "ERROR: Too much swag detected. Continuing anyway…",
+    "WARNING: Vibes misaligned. Recalibrating…",
+    "CRITICAL: Coffee levels low. Proceeding at reduced capacity…",
+    "ERROR 404: Motivation not found. Faking it…",
+    "BSOD avoided (barely)…",
+    "Kernel panic suppressed. You're welcome…",
+  ];
+
+  const speedMap = { slow: 8000, normal: 4000, fast: 1800, ludicrous: 500 };
+
+  let rafId = null;
+  let startTime = null;
+  let rawT = 0;
+  let stuckUntil = 0;
+  let stuckMsg = null;
+  let msgQueue = [];
+  let msgIdx = 0;
+
+  function getMessages() {
+    const custom = document.getElementById('ln-custom-msgs').value.trim();
+    if (custom) return custom.split('\n').filter(l => l.trim());
+    return document.getElementById('ln-random-msgs').checked ? [...MESSAGES] : ["Loading…"];
+  }
+
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function setBar(p) {
+    const v = Math.max(0, Math.min(100, p));
+    document.getElementById('ln-preview-bar').style.width = v + '%';
+    document.getElementById('ln-preview-pct').textContent = Math.round(v) + '%';
+    document.getElementById('ln-fs-bar').style.width = v + '%';
+    document.getElementById('ln-fs-pct').textContent = Math.round(v) + '%';
+  }
+  function setMsg(msg) {
+    document.getElementById('ln-preview-msg').textContent = msg;
+    document.getElementById('ln-fs-msg').textContent = msg;
+  }
+  function setTitle(t) {
+    document.getElementById('ln-preview-title').textContent = t;
+    document.getElementById('ln-fs-title').textContent = t;
+  }
+  function setColor(c) {
+    document.getElementById('ln-preview-bar').style.background = c;
+    document.getElementById('ln-fs-bar').style.background = c;
+  }
+
+  function startLoad() {
+    if (rafId) cancelAnimationFrame(rafId);
+    rawT = 0;
+    startTime = null;
+    stuckUntil = 0;
+    stuckMsg = null;
+    msgQueue = shuffle(getMessages());
+    msgIdx = 0;
+    setBar(0);
+    setMsg(msgQueue[0] || 'Loading…');
+    setTitle(document.getElementById('ln-title-input').value || 'Loading…');
+    setColor(document.getElementById('ln-color').value);
+
+    const duration = speedMap[document.getElementById('ln-speed').value] || 4000;
+    const useFakeErrors = document.getElementById('ln-fake-errors').checked;
+    const easeFn = getEaseFn();
+
+    function frame(now) {
+      if (!startTime) startTime = now;
+      const elapsed = now - startTime;
+
+      // fake stall
+      if (useFakeErrors && stuckUntil === 0 && rawT > 0.1 && rawT < 0.88 && Math.random() < 0.002) {
+        stuckUntil = now + Math.random() * 1200 + 400;
+        stuckMsg = ERRORS[Math.floor(Math.random() * ERRORS.length)];
+        setMsg(stuckMsg);
+      }
+      if (stuckUntil > 0) {
+        if (now < stuckUntil) { rafId = requestAnimationFrame(frame); return; }
+        stuckUntil = 0; stuckMsg = null;
+      }
+
+      rawT = Math.min(1, elapsed / duration);
+      const visual = easeFn(rawT);
+      setBar(visual * 100);
+
+      // rotate messages
+      const newIdx = Math.min(msgQueue.length - 1, Math.floor(rawT * msgQueue.length));
+      if (newIdx !== msgIdx) { msgIdx = newIdx; setMsg(msgQueue[msgIdx]); }
+
+      if (rawT < 1) {
+        rafId = requestAnimationFrame(frame);
+      } else {
+        setBar(100);
+        setMsg('Done.');
+      }
+    }
+    rafId = requestAnimationFrame(frame);
+  }
+
+  // ── Wire controls ───────────────────────────────────────────────────────────
+  document.getElementById('ln-title-input').addEventListener('input', () =>
+    setTitle(document.getElementById('ln-title-input').value || 'Loading…'));
+  document.getElementById('ln-color').addEventListener('input', e => {
+    setColor(e.target.value); drawGraph();
+  });
+  document.getElementById('ln-speed').addEventListener('change', startLoad);
+  document.getElementById('ln-random-msgs').addEventListener('change', startLoad);
+  document.getElementById('ln-fake-errors').addEventListener('change', startLoad);
+  document.getElementById('ln-restart-btn').addEventListener('click', startLoad);
+
+  document.getElementById('ln-fullscreen-btn').addEventListener('click', () => {
+    document.getElementById('ln-fs').classList.add('active');
+    startLoad();
+  });
+  document.getElementById('ln-fs-exit').addEventListener('click', () => {
+    document.getElementById('ln-fs').classList.remove('active');
+    startLoad();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') document.getElementById('ln-fs-exit').click();
+    if (e.key === 'F11') { e.preventDefault(); document.getElementById('ln-fullscreen-btn').click(); }
+  });
+
+  document.getElementById('ln-download-btn').addEventListener('click', async () => {
+    try {
+      const { default: html2canvas } = await import('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.esm.js');
+      const canvas = await html2canvas(document.getElementById('ln-preview'), { backgroundColor: '#000' });
+      const a = document.createElement('a'); a.download = 'loading-screen.png';
+      a.href = canvas.toDataURL(); a.click();
+    } catch {
+      alert('Download requires an internet connection to load the screenshot library.');
+    }
+  });
+
+  // init
+  isCustom = false;
+  drawGraph();
+  startLoad();
   </script>
   <script src="/static/site.js"></script>
 </body>
