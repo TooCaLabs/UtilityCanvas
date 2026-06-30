@@ -72,7 +72,7 @@
       flex-direction: column;
       gap: 0.9rem;
       overflow-y: auto;
-      max-height: 70vh;
+      max-height: 72vh;
     }
     .ln-options-card h2 {
       margin: 0;
@@ -136,7 +136,7 @@
     .ln-toggle {
       width: 38px;
       height: 22px;
-      background: #222;
+      background: #333;
       border-radius: 99px;
       border: 1px solid var(--line);
       position: relative;
@@ -157,25 +157,34 @@
     }
     .ln-toggle:checked::after { left: 18px; }
 
-    /* easing graph */
     .ln-graph-wrap {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.4rem;
+    }
+    .ln-graph-canvas-wrap {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: #0a0a18;
     }
     .ln-graph-canvas {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: rgba(0,17,62,0.75);
-      cursor: crosshair;
+      display: block;
       width: 100%;
       aspect-ratio: 1;
-      display: block;
+      cursor: default;
     }
+    .ln-graph-canvas.editable { cursor: crosshair; }
     .ln-graph-hint {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--ink-soft);
       text-align: center;
+    }
+    .ln-graph-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.65rem;
+      color: #555;
     }
 
     @media (max-width: 700px) {
@@ -295,6 +304,11 @@
         </div>
 
         <div class="ln-toggle-row">
+          <label for="ln-loop">Loop</label>
+          <input type="checkbox" class="ln-toggle" id="ln-loop">
+        </div>
+
+        <div class="ln-toggle-row">
           <label for="ln-random-msgs">Random absurd messages</label>
           <input type="checkbox" class="ln-toggle" id="ln-random-msgs" checked>
         </div>
@@ -316,8 +330,8 @@
           <select id="ln-easing-preset">
             <option value="linear">Linear</option>
             <option value="easeInQuad">Ease In</option>
-            <option value="easeOutQuad" selected>Ease Out</option>
-            <option value="easeInOutQuad">Ease In Out</option>
+            <option value="easeOutQuad">Ease Out</option>
+            <option value="easeInOutQuad" selected>Ease In Out</option>
             <option value="easeInCubic">Ease In Cubic</option>
             <option value="easeOutCubic">Ease Out Cubic</option>
             <option value="easeInOutCubic">Ease In Out Cubic</option>
@@ -331,8 +345,14 @@
         </div>
 
         <div class="ln-graph-wrap">
-          <canvas id="ln-graph" class="ln-graph-canvas" width="200" height="200"></canvas>
-          <p class="ln-graph-hint" id="ln-graph-hint">Drag the handles to edit the curve</p>
+          <div class="ln-graph-label-row">
+            <span>progress ↑</span>
+            <span style="align-self:flex-end">time →</span>
+          </div>
+          <div class="ln-graph-canvas-wrap">
+            <canvas id="ln-graph" class="ln-graph-canvas" width="400" height="400"></canvas>
+          </div>
+          <p class="ln-graph-hint" id="ln-graph-hint">Select "Custom Bezier" to drag the handles</p>
         </div>
 
       </div>
@@ -353,38 +373,37 @@
   <script>
   // ── Easing functions ────────────────────────────────────────────────────────
   const EASINGS = {
-    linear:          t => t,
-    easeInQuad:      t => t * t,
-    easeOutQuad:     t => t * (2 - t),
-    easeInOutQuad:   t => t < 0.5 ? 2*t*t : -1+(4-2*t)*t,
-    easeInCubic:     t => t * t * t,
-    easeOutCubic:    t => (--t) * t * t + 1,
-    easeInOutCubic:  t => t < 0.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1,
-    easeOutBounce:   t => {
+    linear:         function(t) { return t; },
+    easeInQuad:     function(t) { return t * t; },
+    easeOutQuad:    function(t) { return t * (2 - t); },
+    easeInOutQuad:  function(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; },
+    easeInCubic:    function(t) { return t * t * t; },
+    easeOutCubic:   function(t) { var s = t - 1; return s*s*s + 1; },
+    easeInOutCubic: function(t) { return t < 0.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1; },
+    easeOutBounce:  function(t) {
       if (t < 1/2.75) return 7.5625*t*t;
-      if (t < 2/2.75) return 7.5625*(t-=1.5/2.75)*t+0.75;
-      if (t < 2.5/2.75) return 7.5625*(t-=2.25/2.75)*t+0.9375;
-      return 7.5625*(t-=2.625/2.75)*t+0.984375;
+      if (t < 2/2.75) { t -= 1.5/2.75; return 7.5625*t*t+0.75; }
+      if (t < 2.5/2.75) { t -= 2.25/2.75; return 7.5625*t*t+0.9375; }
+      t -= 2.625/2.75; return 7.5625*t*t+0.984375;
     },
-    easeOutElastic:  t => {
+    easeOutElastic: function(t) {
       if (t === 0 || t === 1) return t;
-      return Math.pow(2,-10*t)*Math.sin((t-0.075)*(2*Math.PI)/0.3)+1;
+      return Math.pow(2, -10*t) * Math.sin((t - 0.075) * (2*Math.PI) / 0.3) + 1;
     },
-    easeInBack:      t => { const c = 1.70158; return t*t*((c+1)*t-c); },
-    stepped3:        t => Math.min(1, Math.floor(t * 3) / 3),
-    stepped6:        t => Math.min(1, Math.floor(t * 6) / 6),
+    easeInBack:     function(t) { var c = 1.70158; return t*t*((c+1)*t - c); },
+    stepped3:       function(t) { return Math.min(1, Math.floor(t * 3) / 3); },
+    stepped6:       function(t) { return Math.min(1, Math.floor(t * 6) / 6); },
   };
 
-  // ── Cubic bezier solver (like CSS cubic-bezier) ─────────────────────────────
+  // ── Cubic bezier solver ─────────────────────────────────────────────────────
   function cubicBezier(p1x, p1y, p2x, p2y) {
     return function(t) {
-      // numerical solve for x, return y
-      function B(t, p1, p2) {
-        return 3*(1-t)*(1-t)*t*p1 + 3*(1-t)*t*t*p2 + t*t*t;
+      function B(u, p1, p2) {
+        return 3*(1-u)*(1-u)*u*p1 + 3*(1-u)*u*u*p2 + u*u*u;
       }
-      let lo = 0, hi = 1, mt = t;
-      for (let i = 0; i < 12; i++) {
-        const x = B(mt, p1x, p2x) - t;
+      var lo = 0, hi = 1, mt = t;
+      for (var i = 0; i < 14; i++) {
+        var x = B(mt, p1x, p2x) - t;
         if (Math.abs(x) < 0.0001) break;
         if (x > 0) hi = mt; else lo = mt;
         mt = (lo + hi) / 2;
@@ -393,184 +412,201 @@
     };
   }
 
-  // Control points for custom bezier [p1x, p1y, p2x, p2y]
-  let customBezier = [0.25, 0.1, 0.25, 1.0];
+  var customCP = [0.42, 0, 0.58, 1]; // default = ease in out
+  var handles = [{ x: 0.42, y: 0 }, { x: 0.58, y: 1 }];
+  var isCustom = false;
 
-  // Preset → bezier control points (for graph display)
-  const PRESET_BEZIER = {
+  function getEaseFn() {
+    var preset = document.getElementById('ln-easing-preset').value;
+    if (preset === 'custom') return cubicBezier(customCP[0], customCP[1], customCP[2], customCP[3]);
+    return EASINGS[preset] || EASINGS.linear;
+  }
+
+  // Approximate bezier control points for each preset (for handle sync)
+  var PRESET_CP = {
     linear:         [0, 0, 1, 1],
     easeInQuad:     [0.55, 0, 1, 0.45],
     easeOutQuad:    [0, 0.55, 0.45, 1],
-    easeInOutQuad:  [0.45, 0, 0.55, 1],
+    easeInOutQuad:  [0.42, 0, 0.58, 1],
     easeInCubic:    [0.55, 0.055, 0.675, 0.19],
     easeOutCubic:   [0.215, 0.61, 0.355, 1],
     easeInOutCubic: [0.645, 0.045, 0.355, 1],
     easeOutBounce:  null,
     easeOutElastic: null,
-    easeInBack:     [0.6, -0.28, 0.735, 0.045],
+    easeInBack:     null,
     stepped3:       null,
     stepped6:       null,
     custom:         null,
   };
 
-  function getEaseFn() {
-    const preset = document.getElementById('ln-easing-preset').value;
-    if (preset === 'custom') return cubicBezier(...customBezier);
-    return EASINGS[preset] || EASINGS.linear;
-  }
+  // ── Graph canvas ────────────────────────────────────────────────────────────
+  var gEl = document.getElementById('ln-graph');
+  var gCtx = gEl.getContext('2d');
+  var GS = 400; // canvas internal size
+  var PAD = 36;
+  var GW = GS - PAD * 2;
+  var GH = GS - PAD * 2;
 
-  // ── Graph editor ────────────────────────────────────────────────────────────
-  const graphCanvas = document.getElementById('ln-graph');
-  const ctx = graphCanvas.getContext('2d');
-  const W = 200, H = 200, PAD = 20;
-  const GW = W - PAD*2, GH = H - PAD*2;
-
-  function toCanvas(nx, ny) {
+  function toCv(nx, ny) {
     return [PAD + nx * GW, PAD + (1 - ny) * GH];
   }
-  function fromCanvas(cx, cy) {
+  function fromCv(cx, cy) {
     return [(cx - PAD) / GW, 1 - (cy - PAD) / GH];
   }
 
-  let handles = [
-    { x: 0.25, y: 0.1 },   // P1
-    { x: 0.25, y: 1.0 },   // P2
-  ];
-  let dragging = null;
-  let isCustom = false;
-
   function drawGraph() {
-    ctx.clearRect(0, 0, W, H);
+    gCtx.clearRect(0, 0, GS, GS);
+
+    // background (canvas doesn't use CSS bg for drawing)
+    gCtx.fillStyle = '#0a0a18';
+    gCtx.fillRect(0, 0, GS, GS);
 
     // grid
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 4; i++) {
-      const x = PAD + (i/4)*GW, y = PAD + (i/4)*GH;
-      ctx.beginPath(); ctx.moveTo(x, PAD); ctx.lineTo(x, PAD+GH); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(PAD+GW, y); ctx.stroke();
+    gCtx.strokeStyle = 'rgba(255,255,255,0.07)';
+    gCtx.lineWidth = 1;
+    for (var i = 0; i <= 4; i++) {
+      var gx = PAD + (i/4)*GW;
+      var gy = PAD + (i/4)*GH;
+      gCtx.beginPath(); gCtx.moveTo(gx, PAD); gCtx.lineTo(gx, PAD+GH); gCtx.stroke();
+      gCtx.beginPath(); gCtx.moveTo(PAD, gy); gCtx.lineTo(PAD+GW, gy); gCtx.stroke();
     }
 
-    // axes
-    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(PAD, PAD, GW, GH);
+    // diagonal hint
+    gCtx.strokeStyle = 'rgba(255,255,255,0.06)';
+    gCtx.lineWidth = 1;
+    gCtx.setLineDash([6,6]);
+    gCtx.beginPath();
+    var a0 = toCv(0,0), a1 = toCv(1,1);
+    gCtx.moveTo(a0[0], a0[1]); gCtx.lineTo(a1[0], a1[1]);
+    gCtx.stroke();
+    gCtx.setLineDash([]);
 
-    const preset = document.getElementById('ln-easing-preset').value;
-    const color = document.getElementById('ln-color').value;
+    // border
+    gCtx.strokeStyle = 'rgba(255,255,255,0.15)';
+    gCtx.lineWidth = 1.5;
+    gCtx.strokeRect(PAD, PAD, GW, GH);
 
-    // handle lines (only in custom mode)
+    var color = document.getElementById('ln-color').value;
+
+    // custom handle lines
     if (isCustom) {
-      const [p0x, p0y] = toCanvas(0, 0);
-      const [p1x, p1y] = toCanvas(handles[0].x, handles[0].y);
-      const [p2x, p2y] = toCanvas(handles[1].x, handles[1].y);
-      const [p3x, p3y] = toCanvas(1, 1);
-      ctx.strokeStyle = 'rgba(255,255,255,0.18)';
-      ctx.lineWidth = 1;
-      ctx.setLineDash([3, 3]);
-      ctx.beginPath(); ctx.moveTo(p0x, p0y); ctx.lineTo(p1x, p1y); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(p3x, p3y); ctx.lineTo(p2x, p2y); ctx.stroke();
-      ctx.setLineDash([]);
+      var p0 = toCv(0, 0), p1 = toCv(handles[0].x, handles[0].y);
+      var p2 = toCv(handles[1].x, handles[1].y), p3 = toCv(1, 1);
+      gCtx.strokeStyle = 'rgba(255,255,255,0.2)';
+      gCtx.lineWidth = 1.5;
+      gCtx.setLineDash([4, 4]);
+      gCtx.beginPath(); gCtx.moveTo(p0[0], p0[1]); gCtx.lineTo(p1[0], p1[1]); gCtx.stroke();
+      gCtx.beginPath(); gCtx.moveTo(p3[0], p3[1]); gCtx.lineTo(p2[0], p2[1]); gCtx.stroke();
+      gCtx.setLineDash([]);
     }
 
     // curve
-    const easeFn = getEaseFn();
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 2.5;
-    ctx.beginPath();
-    for (let i = 0; i <= 120; i++) {
-      const t = i / 120;
-      const v = Math.max(-0.15, Math.min(1.15, easeFn(t)));
-      const [cx, cy] = toCanvas(t, v);
-      i === 0 ? ctx.moveTo(cx, cy) : ctx.lineTo(cx, cy);
+    var ease = getEaseFn();
+    gCtx.strokeStyle = color;
+    gCtx.lineWidth = 3;
+    gCtx.shadowColor = color;
+    gCtx.shadowBlur = 6;
+    gCtx.beginPath();
+    for (var s = 0; s <= 200; s++) {
+      var t = s / 200;
+      var v = ease(t);
+      v = Math.max(-0.18, Math.min(1.18, v));
+      var pt = toCv(t, v);
+      s === 0 ? gCtx.moveTo(pt[0], pt[1]) : gCtx.lineTo(pt[0], pt[1]);
     }
-    ctx.stroke();
+    gCtx.stroke();
+    gCtx.shadowBlur = 0;
 
-    // fixed anchor points
-    ctx.fillStyle = 'rgba(255,255,255,0.5)';
-    const [ax, ay] = toCanvas(0, 0); ctx.beginPath(); ctx.arc(ax, ay, 4, 0, Math.PI*2); ctx.fill();
-    const [bx, by] = toCanvas(1, 1); ctx.beginPath(); ctx.arc(bx, by, 4, 0, Math.PI*2); ctx.fill();
+    // anchor dots
+    gCtx.fillStyle = 'rgba(255,255,255,0.6)';
+    var d0 = toCv(0,0); gCtx.beginPath(); gCtx.arc(d0[0], d0[1], 5, 0, Math.PI*2); gCtx.fill();
+    var d1 = toCv(1,1); gCtx.beginPath(); gCtx.arc(d1[0], d1[1], 5, 0, Math.PI*2); gCtx.fill();
 
-    // draggable handles (custom mode only)
+    // draggable handles (custom only)
     if (isCustom) {
-      handles.forEach((h, i) => {
-        const [hx, hy] = toCanvas(h.x, h.y);
-        ctx.fillStyle = color;
-        ctx.beginPath(); ctx.arc(hx, hy, 6, 0, Math.PI*2); ctx.fill();
-        ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
+      handles.forEach(function(h) {
+        var pt = toCv(h.x, h.y);
+        gCtx.fillStyle = color;
+        gCtx.beginPath(); gCtx.arc(pt[0], pt[1], 8, 0, Math.PI*2); gCtx.fill();
+        gCtx.strokeStyle = '#fff';
+        gCtx.lineWidth = 2;
+        gCtx.stroke();
       });
     }
   }
 
-  function getHandleAt(cx, cy) {
-    for (let i = 0; i < handles.length; i++) {
-      const [hx, hy] = toCanvas(handles[i].x, handles[i].y);
-      if (Math.hypot(cx - hx, cy - hy) < 10) return i;
+  // Handle drag
+  var dragging = null;
+
+  function cvPos(e) {
+    var rect = gEl.getBoundingClientRect();
+    var scaleX = GS / rect.width;
+    var scaleY = GS / rect.height;
+    var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return [(clientX - rect.left) * scaleX, (clientY - rect.top) * scaleY];
+  }
+
+  function nearHandle(cx, cy) {
+    for (var i = 0; i < handles.length; i++) {
+      var pt = toCv(handles[i].x, handles[i].y);
+      if (Math.hypot(cx - pt[0], cy - pt[1]) < 14) return i;
     }
     return null;
   }
 
-  function getCanvasPos(e) {
-    const rect = graphCanvas.getBoundingClientRect();
-    const scaleX = W / rect.width, scaleY = H / rect.height;
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    return [(clientX - rect.left) * scaleX, (clientY - rect.top) * scaleY];
-  }
-
-  graphCanvas.addEventListener('mousedown', e => {
+  gEl.addEventListener('mousedown', function(e) {
     if (!isCustom) return;
-    const [cx, cy] = getCanvasPos(e);
-    dragging = getHandleAt(cx, cy);
+    var pos = cvPos(e);
+    dragging = nearHandle(pos[0], pos[1]);
   });
-  graphCanvas.addEventListener('touchstart', e => {
+  gEl.addEventListener('touchstart', function(e) {
     if (!isCustom) return;
     e.preventDefault();
-    const [cx, cy] = getCanvasPos(e);
-    dragging = getHandleAt(cx, cy);
+    var pos = cvPos(e);
+    dragging = nearHandle(pos[0], pos[1]);
   }, { passive: false });
 
-  function onMove(e) {
+  function onDrag(e) {
     if (dragging === null || !isCustom) return;
-    const [cx, cy] = getCanvasPos(e);
-    let [nx, ny] = fromCanvas(cx, cy);
-    nx = Math.max(0, Math.min(1, nx));
-    ny = Math.max(-0.15, Math.min(1.15, ny));
+    var pos = cvPos(e);
+    var nxy = fromCv(pos[0], pos[1]);
+    var nx = Math.max(0, Math.min(1, nxy[0]));
+    var ny = Math.max(-0.18, Math.min(1.18, nxy[1]));
     handles[dragging] = { x: nx, y: ny };
-    customBezier = [handles[0].x, handles[0].y, handles[1].x, handles[1].y];
+    customCP = [handles[0].x, handles[0].y, handles[1].x, handles[1].y];
     drawGraph();
   }
-  graphCanvas.addEventListener('mousemove', onMove);
-  graphCanvas.addEventListener('touchmove', e => { e.preventDefault(); onMove(e); }, { passive: false });
-  window.addEventListener('mouseup', () => { dragging = null; });
-  window.addEventListener('touchend', () => { dragging = null; });
+  gEl.addEventListener('mousemove', onDrag);
+  gEl.addEventListener('touchmove', function(e) { e.preventDefault(); onDrag(e); }, { passive: false });
+  window.addEventListener('mouseup', function() { dragging = null; });
+  window.addEventListener('touchend', function() { dragging = null; });
 
-  document.getElementById('ln-easing-preset').addEventListener('change', () => {
-    const preset = document.getElementById('ln-easing-preset').value;
+  document.getElementById('ln-easing-preset').addEventListener('change', function() {
+    var preset = document.getElementById('ln-easing-preset').value;
     isCustom = preset === 'custom';
+    gEl.className = isCustom ? 'ln-graph-canvas editable' : 'ln-graph-canvas';
     document.getElementById('ln-graph-hint').textContent = isCustom
-      ? 'Drag the handles to edit the curve'
-      : 'Select "Custom Bezier" to edit';
+      ? 'Drag the colored handles to reshape the curve'
+      : 'Select "Custom Bezier" to drag the handles';
 
-    // sync handles to preset bezier if available
-    const bp = PRESET_BEZIER[preset];
-    if (bp) {
-      handles = [{ x: bp[0], y: bp[1] }, { x: bp[2], y: bp[3] }];
+    var cp = PRESET_CP[preset];
+    if (cp) {
+      handles = [{ x: cp[0], y: cp[1] }, { x: cp[2], y: cp[3] }];
+      customCP = cp.slice();
     }
     drawGraph();
     startLoad();
   });
 
-  // ── Messages / Errors ───────────────────────────────────────────────────────
-  const MESSAGES = [
+  // ── Messages ────────────────────────────────────────────────────────────────
+  var MESSAGES = [
     "Downloading more RAM…","Deleting System32…","Converting oxygen to CO2…",
     "Reticulating splines…","Negotiating with servers…","Pretending to work…",
     "Calculating the meaning of life…","Warming up the hamsters…",
     "Syncing with the moon…","Bribing the firewall…","Untangling ethernet cables…",
     "Overclocking the toaster…","Installing drivers from 2003…",
-    "Generating random numbers… (not that random)…","Compressing the internet…",
+    "Generating random numbers… (not that random)","Compressing the internet…",
     "Asking ChatGPT for help…","Googling the error message…",
     "Defragmenting your soul…","Mining cryptocurrency in background…",
     "Teaching AI to feel…","Reversing the polarity…","Rerouting through proxy…",
@@ -578,7 +614,7 @@
     "Upgrading to Windows 12…","Downloading the cloud…",
     "Uploading your browsing history…","Charging the flux capacitor…",
   ];
-  const ERRORS = [
+  var ERRORS = [
     "ERROR: Too much swag detected. Continuing anyway…",
     "WARNING: Vibes misaligned. Recalibrating…",
     "CRITICAL: Coffee levels low. Proceeding at reduced capacity…",
@@ -587,41 +623,37 @@
     "Kernel panic suppressed. You're welcome…",
   ];
 
-  const speedMap = { slow: 8000, normal: 4000, fast: 1800, ludicrous: 500 };
+  var speedMap = { slow: 8000, normal: 4000, fast: 1800, ludicrous: 500 };
 
-  let rafId = null;
-  let startTime = null;
-  let rawT = 0;
-  let stuckUntil = 0;
-  let stuckMsg = null;
-  let msgQueue = [];
-  let msgIdx = 0;
-
-  function getMessages() {
-    const custom = document.getElementById('ln-custom-msgs').value.trim();
-    if (custom) return custom.split('\n').filter(l => l.trim());
-    return document.getElementById('ln-random-msgs').checked ? [...MESSAGES] : ["Loading…"];
-  }
+  var rafId = null;
+  var msgQueue = [];
+  var msgIdx = 0;
 
   function shuffle(arr) {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
     }
     return a;
   }
 
+  function getMessages() {
+    var custom = document.getElementById('ln-custom-msgs').value.trim();
+    if (custom) return custom.split('\n').filter(function(l) { return l.trim(); });
+    return document.getElementById('ln-random-msgs').checked ? MESSAGES.slice() : ['Loading…'];
+  }
+
   function setBar(p) {
-    const v = Math.max(0, Math.min(100, p));
+    var v = Math.max(0, Math.min(100, p));
     document.getElementById('ln-preview-bar').style.width = v + '%';
     document.getElementById('ln-preview-pct').textContent = Math.round(v) + '%';
     document.getElementById('ln-fs-bar').style.width = v + '%';
     document.getElementById('ln-fs-pct').textContent = Math.round(v) + '%';
   }
-  function setMsg(msg) {
-    document.getElementById('ln-preview-msg').textContent = msg;
-    document.getElementById('ln-fs-msg').textContent = msg;
+  function setMsg(m) {
+    document.getElementById('ln-preview-msg').textContent = m;
+    document.getElementById('ln-fs-msg').textContent = m;
   }
   function setTitle(t) {
     document.getElementById('ln-preview-title').textContent = t;
@@ -633,92 +665,111 @@
   }
 
   function startLoad() {
-    if (rafId) cancelAnimationFrame(rafId);
-    rawT = 0;
-    startTime = null;
-    stuckUntil = 0;
-    stuckMsg = null;
+    if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
+
     msgQueue = shuffle(getMessages());
     msgIdx = 0;
     setBar(0);
     setMsg(msgQueue[0] || 'Loading…');
     setTitle(document.getElementById('ln-title-input').value || 'Loading…');
-    setColor(document.getElementById('ln-color').value);
+    var barColor = document.getElementById('ln-color').value;
+    setColor(barColor);
 
-    const duration = speedMap[document.getElementById('ln-speed').value] || 4000;
-    const useFakeErrors = document.getElementById('ln-fake-errors').checked;
-    const easeFn = getEaseFn();
+    var duration = speedMap[document.getElementById('ln-speed').value] || 4000;
+    var useErrors = document.getElementById('ln-fake-errors').checked;
+    var doLoop   = document.getElementById('ln-loop').checked;
+    var easeFn   = getEaseFn();
+
+    var startTime = null;
+    var stallStart = 0;
+    var stallUntil = 0;
+    var stallOffset = 0; // total ms of stalls, subtracted from elapsed
 
     function frame(now) {
-      if (!startTime) startTime = now;
-      const elapsed = now - startTime;
+      if (startTime === null) startTime = now;
 
-      // fake stall
-      if (useFakeErrors && stuckUntil === 0 && rawT > 0.1 && rawT < 0.88 && Math.random() < 0.002) {
-        stuckUntil = now + Math.random() * 1200 + 400;
-        stuckMsg = ERRORS[Math.floor(Math.random() * ERRORS.length)];
-        setMsg(stuckMsg);
-      }
-      if (stuckUntil > 0) {
-        if (now < stuckUntil) { rafId = requestAnimationFrame(frame); return; }
-        stuckUntil = 0; stuckMsg = null;
+      // stall in progress
+      if (stallUntil > 0) {
+        if (now < stallUntil) { rafId = requestAnimationFrame(frame); return; }
+        stallOffset += stallUntil - stallStart;
+        stallUntil = 0;
+        stallStart = 0;
       }
 
-      rawT = Math.min(1, elapsed / duration);
-      const visual = easeFn(rawT);
+      var elapsed = Math.max(0, now - startTime - stallOffset);
+      var rawT = Math.min(1, elapsed / duration);
+      var visual = easeFn(rawT);
       setBar(visual * 100);
 
-      // rotate messages
-      const newIdx = Math.min(msgQueue.length - 1, Math.floor(rawT * msgQueue.length));
-      if (newIdx !== msgIdx) { msgIdx = newIdx; setMsg(msgQueue[msgIdx]); }
+      // trigger a stall occasionally (~4% chance per second while in mid-range)
+      if (useErrors && stallUntil === 0 && rawT > 0.08 && rawT < 0.90 && Math.random() < 0.0006) {
+        stallStart = now;
+        stallUntil = now + Math.random() * 1000 + 300;
+        setMsg(ERRORS[Math.floor(Math.random() * ERRORS.length)]);
+      }
+
+      // rotate messages based on rawT
+      if (stallUntil === 0) {
+        var ni = Math.min(msgQueue.length - 1, Math.floor(rawT * msgQueue.length));
+        if (ni !== msgIdx) { msgIdx = ni; setMsg(msgQueue[msgIdx]); }
+      }
 
       if (rawT < 1) {
         rafId = requestAnimationFrame(frame);
       } else {
         setBar(100);
         setMsg('Done.');
+        rafId = null;
+        if (doLoop) {
+          setTimeout(function() { startLoad(); }, 800);
+        }
       }
     }
     rafId = requestAnimationFrame(frame);
   }
 
-  // ── Wire controls ───────────────────────────────────────────────────────────
-  document.getElementById('ln-title-input').addEventListener('input', () =>
-    setTitle(document.getElementById('ln-title-input').value || 'Loading…'));
-  document.getElementById('ln-color').addEventListener('input', e => {
+  // ── Controls ────────────────────────────────────────────────────────────────
+  document.getElementById('ln-title-input').addEventListener('input', function() {
+    setTitle(this.value || 'Loading…');
+  });
+  document.getElementById('ln-color').addEventListener('input', function(e) {
     setColor(e.target.value); drawGraph();
   });
   document.getElementById('ln-speed').addEventListener('change', startLoad);
   document.getElementById('ln-random-msgs').addEventListener('change', startLoad);
   document.getElementById('ln-fake-errors').addEventListener('change', startLoad);
+  document.getElementById('ln-loop').addEventListener('change', function() {
+    if (this.checked) startLoad();
+  });
   document.getElementById('ln-restart-btn').addEventListener('click', startLoad);
 
-  document.getElementById('ln-fullscreen-btn').addEventListener('click', () => {
+  document.getElementById('ln-fullscreen-btn').addEventListener('click', function() {
     document.getElementById('ln-fs').classList.add('active');
     startLoad();
   });
-  document.getElementById('ln-fs-exit').addEventListener('click', () => {
+  document.getElementById('ln-fs-exit').addEventListener('click', function() {
     document.getElementById('ln-fs').classList.remove('active');
     startLoad();
   });
-  document.addEventListener('keydown', e => {
+  document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') document.getElementById('ln-fs-exit').click();
     if (e.key === 'F11') { e.preventDefault(); document.getElementById('ln-fullscreen-btn').click(); }
   });
 
-  document.getElementById('ln-download-btn').addEventListener('click', async () => {
+  document.getElementById('ln-download-btn').addEventListener('click', async function() {
     try {
       const { default: html2canvas } = await import('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.esm.js');
       const canvas = await html2canvas(document.getElementById('ln-preview'), { backgroundColor: '#000' });
-      const a = document.createElement('a'); a.download = 'loading-screen.png';
-      a.href = canvas.toDataURL(); a.click();
-    } catch {
-      alert('Download requires an internet connection to load the screenshot library.');
+      const a = document.createElement('a');
+      a.download = 'loading-screen.png';
+      a.href = canvas.toDataURL();
+      a.click();
+    } catch(err) {
+      alert('Download requires an internet connection for the screenshot library.');
     }
   });
 
-  // init
-  isCustom = false;
+  // ── Init ────────────────────────────────────────────────────────────────────
   drawGraph();
   startLoad();
   </script>
