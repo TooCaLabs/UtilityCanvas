@@ -74,11 +74,7 @@
       overflow-y: auto;
       max-height: 72vh;
     }
-    .ln-options-card h2 {
-      margin: 0;
-      font-size: 1.1rem;
-      color: var(--ink);
-    }
+    .ln-options-card h2 { margin: 0; font-size: 1.1rem; color: var(--ink); }
     .ln-section-divider {
       font-size: 0.72rem;
       text-transform: uppercase;
@@ -88,15 +84,8 @@
       padding-bottom: 0.3rem;
       margin-top: 0.3rem;
     }
-    .ln-field {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
-    .ln-field label {
-      font-size: 0.85rem;
-      color: var(--ink-soft);
-    }
+    .ln-field { display: flex; flex-direction: column; gap: 0.3rem; }
+    .ln-field label { font-size: 0.85rem; color: var(--ink-soft); }
     .ln-field input, .ln-field select, .ln-field textarea {
       background: rgba(0,17,62,0.75);
       border: 1px solid var(--line);
@@ -107,35 +96,20 @@
       font-family: inherit;
       outline: none;
     }
-    .ln-field input:focus, .ln-field select:focus, .ln-field textarea:focus {
-      border-color: #0b85c8;
-    }
-    .ln-color-row {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-    }
+    .ln-field input:focus, .ln-field select:focus, .ln-field textarea:focus { border-color: #0b85c8; }
+    .ln-color-row { display: flex; gap: 0.5rem; align-items: center; }
     .ln-color-row input[type=color] {
-      width: 36px;
-      height: 36px;
+      width: 36px; height: 36px;
       border-radius: 8px;
       border: 1px solid var(--line);
       background: none;
       cursor: pointer;
       padding: 2px;
     }
-    .ln-toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .ln-toggle-row label {
-      font-size: 0.85rem;
-      color: var(--ink-soft);
-    }
+    .ln-toggle-row { display: flex; align-items: center; justify-content: space-between; }
+    .ln-toggle-row label { font-size: 0.85rem; color: var(--ink-soft); }
     .ln-toggle {
-      width: 38px;
-      height: 22px;
+      width: 38px; height: 22px;
       background: #333;
       border-radius: 99px;
       border: 1px solid var(--line);
@@ -157,29 +131,17 @@
     }
     .ln-toggle:checked::after { left: 18px; }
 
-    .ln-graph-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
+    /* Easing graph */
+    .ln-graph-wrap { display: flex; flex-direction: column; gap: 0.4rem; }
     .ln-graph-canvas-wrap {
       border-radius: 10px;
       overflow: hidden;
       border: 1px solid rgba(255,255,255,0.12);
       background: #0a0a18;
     }
-    .ln-graph-canvas {
-      display: block;
-      width: 100%;
-      aspect-ratio: 1;
-      cursor: default;
-    }
+    .ln-graph-canvas { display: block; width: 100%; aspect-ratio: 1; cursor: default; }
     .ln-graph-canvas.editable { cursor: crosshair; }
-    .ln-graph-hint {
-      font-size: 0.72rem;
-      color: var(--ink-soft);
-      text-align: center;
-    }
+    .ln-graph-hint { font-size: 0.72rem; color: var(--ink-soft); text-align: center; }
     .ln-graph-label-row {
       display: flex;
       justify-content: space-between;
@@ -187,11 +149,58 @@
       color: #555;
     }
 
-    @media (max-width: 700px) {
-      .ln-wrap { grid-template-columns: 1fr; }
+    /* Timeline panel */
+    .ln-tl-panel {
+      margin-top: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(0,29,41,0.78);
+      padding: 1.2rem;
+      display: none;
+    }
+    .ln-tl-panel.active { display: block; }
+    .ln-tl-hint { font-size: 0.78rem; color: var(--ink-soft); margin: 0.3rem 0 0.6rem; }
+    .ln-tl-canvas-wrap {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #0a0a18;
+    }
+    .ln-tl-canvas {
+      display: block;
+      width: 100%;
+      aspect-ratio: 800 / 220;
+      cursor: crosshair;
+    }
+    .ln-tl-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-top: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .ln-tl-controls label { font-size: 0.85rem; color: var(--ink-soft); flex-shrink: 0; }
+    .ln-tl-controls select {
+      background: rgba(0,17,62,0.75);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink);
+      padding: 0.35rem 0.55rem;
+      font-size: 0.85rem;
+      font-family: inherit;
+      outline: none;
+      flex: 1;
+      min-width: 120px;
+    }
+    .ln-tl-kf-info {
+      font-size: 0.75rem;
+      color: var(--ink-soft);
+      margin-top: 0.4rem;
     }
 
-    /* fullscreen */
+    @media (max-width: 700px) { .ln-wrap { grid-template-columns: 1fr; } }
+
+    /* Fullscreen */
     .ln-fullscreen-overlay {
       display: none;
       position: fixed;
@@ -203,32 +212,10 @@
       justify-content: center;
     }
     .ln-fullscreen-overlay.active { display: flex; }
-    .ln-fs-title {
-      font-size: clamp(2rem, 6vw, 4rem);
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 0.5rem;
-      text-align: center;
-    }
-    .ln-fs-msg {
-      font-size: clamp(1rem, 2.5vw, 1.5rem);
-      color: #aaa;
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-    .ln-fs-bar-track {
-      width: 60%;
-      height: 12px;
-      background: #222;
-      border-radius: 99px;
-      overflow: hidden;
-    }
-    .ln-fs-bar-fill {
-      height: 100%;
-      width: 0%;
-      border-radius: 99px;
-      background: #0b85c8;
-    }
+    .ln-fs-title { font-size: clamp(2rem, 6vw, 4rem); font-weight: 700; color: #fff; margin-bottom: 0.5rem; text-align: center; }
+    .ln-fs-msg { font-size: clamp(1rem, 2.5vw, 1.5rem); color: #aaa; margin-bottom: 2rem; text-align: center; }
+    .ln-fs-bar-track { width: 60%; height: 12px; background: #222; border-radius: 99px; overflow: hidden; }
+    .ln-fs-bar-fill { height: 100%; width: 0%; border-radius: 99px; background: #0b85c8; }
     .ln-fs-pct { font-size: 1rem; color: #555; margin-top: 0.6rem; }
     .ln-fs-exit {
       position: absolute;
@@ -256,8 +243,7 @@
     </header>
 
     <div class="ln-wrap">
-
-      <!-- Screen preview -->
+      <!-- Preview -->
       <div>
         <div class="ln-screen-card" id="ln-preview">
           <div class="ln-screen-title" id="ln-preview-title">Initializing...</div>
@@ -284,7 +270,6 @@
           <label for="ln-title-input">Title</label>
           <input id="ln-title-input" type="text" value="Initializing..." maxlength="60">
         </div>
-
         <div class="ln-field">
           <label for="ln-speed">Speed</label>
           <select id="ln-speed">
@@ -294,7 +279,6 @@
             <option value="ludicrous">Ludicrous</option>
           </select>
         </div>
-
         <div class="ln-field">
           <label>Bar color</label>
           <div class="ln-color-row">
@@ -302,60 +286,90 @@
             <span style="font-size:0.8rem;color:var(--ink-soft);">Pick any color</span>
           </div>
         </div>
-
         <div class="ln-toggle-row">
           <label for="ln-loop">Loop</label>
           <input type="checkbox" class="ln-toggle" id="ln-loop">
         </div>
-
         <div class="ln-toggle-row">
           <label for="ln-random-msgs">Random absurd messages</label>
           <input type="checkbox" class="ln-toggle" id="ln-random-msgs" checked>
         </div>
-
         <div class="ln-toggle-row">
           <label for="ln-fake-errors">Fake errors mid-load</label>
           <input type="checkbox" class="ln-toggle" id="ln-fake-errors" checked>
         </div>
-
         <div class="ln-field">
           <label for="ln-custom-msgs">Custom messages (one per line)</label>
           <textarea id="ln-custom-msgs" rows="3" placeholder="Leave blank to use built-in messages"></textarea>
         </div>
 
-        <div class="ln-section-divider">Easing</div>
+        <div class="ln-section-divider">Animation</div>
 
-        <div class="ln-field">
-          <label for="ln-easing-preset">Preset</label>
-          <select id="ln-easing-preset">
-            <option value="linear">Linear</option>
-            <option value="easeInQuad">Ease In</option>
-            <option value="easeOutQuad">Ease Out</option>
-            <option value="easeInOutQuad" selected>Ease In Out</option>
-            <option value="easeInCubic">Ease In Cubic</option>
-            <option value="easeOutCubic">Ease Out Cubic</option>
-            <option value="easeInOutCubic">Ease In Out Cubic</option>
-            <option value="easeOutBounce">Bounce Out</option>
-            <option value="easeOutElastic">Elastic Out</option>
-            <option value="easeInBack">Back In (overshoot)</option>
-            <option value="stepped3">Stepped (3)</option>
-            <option value="stepped6">Stepped (6)</option>
-            <option value="custom">Custom Bezier</option>
-          </select>
+        <div class="ln-toggle-row">
+          <label for="ln-timeline-mode">Timeline Mode</label>
+          <input type="checkbox" class="ln-toggle" id="ln-timeline-mode">
         </div>
 
-        <div class="ln-graph-wrap">
-          <div class="ln-graph-label-row">
-            <span>progress ↑</span>
-            <span style="align-self:flex-end">time →</span>
+        <div id="ln-easing-section">
+          <div class="ln-field" style="margin-top:0.3rem">
+            <label for="ln-easing-preset">Easing preset</label>
+            <select id="ln-easing-preset">
+              <option value="linear">Linear</option>
+              <option value="easeInQuad">Ease In</option>
+              <option value="easeOutQuad">Ease Out</option>
+              <option value="easeInOutQuad" selected>Ease In Out</option>
+              <option value="easeInCubic">Ease In Cubic</option>
+              <option value="easeOutCubic">Ease Out Cubic</option>
+              <option value="easeInOutCubic">Ease In Out Cubic</option>
+              <option value="easeOutBounce">Bounce Out</option>
+              <option value="easeOutElastic">Elastic Out</option>
+              <option value="easeInBack">Back In (overshoot)</option>
+              <option value="stepped3">Stepped (3)</option>
+              <option value="stepped6">Stepped (6)</option>
+              <option value="custom">Custom Bezier</option>
+            </select>
           </div>
-          <div class="ln-graph-canvas-wrap">
-            <canvas id="ln-graph" class="ln-graph-canvas" width="400" height="400"></canvas>
+          <div class="ln-graph-wrap" style="margin-top:0.5rem">
+            <div class="ln-graph-label-row">
+              <span>progress ↑</span>
+              <span style="align-self:flex-end">time →</span>
+            </div>
+            <div class="ln-graph-canvas-wrap">
+              <canvas id="ln-graph" class="ln-graph-canvas" width="400" height="400"></canvas>
+            </div>
+            <p class="ln-graph-hint" id="ln-graph-hint">Select "Custom Bezier" to drag the handles</p>
           </div>
-          <p class="ln-graph-hint" id="ln-graph-hint">Select "Custom Bezier" to drag the handles</p>
         </div>
 
       </div>
+    </div>
+
+    <!-- Timeline panel -->
+    <div class="ln-tl-panel" id="ln-tl-panel">
+      <div class="ln-section-divider" style="margin-top:0">Timeline Editor</div>
+      <p class="ln-tl-hint">Click empty space to add a keyframe • Drag to reposition • Right-click to remove • Click a keyframe or segment to select it</p>
+      <div class="ln-tl-canvas-wrap">
+        <canvas id="ln-tl" class="ln-tl-canvas" width="800" height="220"></canvas>
+      </div>
+      <div class="ln-tl-controls">
+        <label for="ln-seg-easing">Selected segment:</label>
+        <select id="ln-seg-easing">
+          <option value="linear">Linear</option>
+          <option value="easeInQuad">Ease In</option>
+          <option value="easeOutQuad">Ease Out</option>
+          <option value="easeInOutQuad" selected>Ease In Out</option>
+          <option value="easeInCubic">Ease In Cubic</option>
+          <option value="easeOutCubic">Ease Out Cubic</option>
+          <option value="easeInOutCubic">Ease In Out Cubic</option>
+          <option value="easeOutBounce">Bounce Out</option>
+          <option value="easeOutElastic">Elastic Out</option>
+          <option value="easeInBack">Back In</option>
+          <option value="stepped3">Stepped (3)</option>
+          <option value="stepped6">Stepped (6)</option>
+        </select>
+        <button id="ln-delete-kf" class="secondary-btn" type="button" style="margin-left:auto;flex-shrink:0">Delete keyframe</button>
+      </div>
+      <p class="ln-tl-kf-info" id="ln-tl-kf-info">No keyframe selected</p>
     </div>
   </main>
 
@@ -372,7 +386,7 @@
 
   <script>
   // ── Easing functions ────────────────────────────────────────────────────────
-  const EASINGS = {
+  var EASINGS = {
     linear:         function(t) { return t; },
     easeInQuad:     function(t) { return t * t; },
     easeOutQuad:    function(t) { return t * (2 - t); },
@@ -395,12 +409,10 @@
     stepped6:       function(t) { return Math.min(1, Math.floor(t * 6) / 6); },
   };
 
-  // ── Cubic bezier solver ─────────────────────────────────────────────────────
+  // ── Cubic bezier (custom preset) ────────────────────────────────────────────
   function cubicBezier(p1x, p1y, p2x, p2y) {
     return function(t) {
-      function B(u, p1, p2) {
-        return 3*(1-u)*(1-u)*u*p1 + 3*(1-u)*u*u*p2 + u*u*u;
-      }
+      function B(u, p1, p2) { return 3*(1-u)*(1-u)*u*p1 + 3*(1-u)*u*u*p2 + u*u*u; }
       var lo = 0, hi = 1, mt = t;
       for (var i = 0; i < 14; i++) {
         var x = B(mt, p1x, p2x) - t;
@@ -412,190 +424,426 @@
     };
   }
 
-  var customCP = [0.42, 0, 0.58, 1]; // default = ease in out
-  var handles = [{ x: 0.42, y: 0 }, { x: 0.58, y: 1 }];
+  var customCP = [0.42, 0, 0.58, 1];
+  var gHandles = [{ x: 0.42, y: 0 }, { x: 0.58, y: 1 }];
   var isCustom = false;
 
-  function getEaseFn() {
-    var preset = document.getElementById('ln-easing-preset').value;
-    if (preset === 'custom') return cubicBezier(customCP[0], customCP[1], customCP[2], customCP[3]);
-    return EASINGS[preset] || EASINGS.linear;
-  }
-
-  // Approximate bezier control points for each preset (for handle sync)
   var PRESET_CP = {
-    linear:         [0, 0, 1, 1],
-    easeInQuad:     [0.55, 0, 1, 0.45],
-    easeOutQuad:    [0, 0.55, 0.45, 1],
-    easeInOutQuad:  [0.42, 0, 0.58, 1],
-    easeInCubic:    [0.55, 0.055, 0.675, 0.19],
-    easeOutCubic:   [0.215, 0.61, 0.355, 1],
-    easeInOutCubic: [0.645, 0.045, 0.355, 1],
-    easeOutBounce:  null,
-    easeOutElastic: null,
-    easeInBack:     null,
-    stepped3:       null,
-    stepped6:       null,
-    custom:         null,
+    linear: [0,0,1,1], easeInQuad: [0.55,0,1,0.45], easeOutQuad: [0,0.55,0.45,1],
+    easeInOutQuad: [0.42,0,0.58,1], easeInCubic: [0.55,0.055,0.675,0.19],
+    easeOutCubic: [0.215,0.61,0.355,1], easeInOutCubic: [0.645,0.045,0.355,1],
   };
 
-  // ── Graph canvas ────────────────────────────────────────────────────────────
+  function getEaseFn() {
+    var p = document.getElementById('ln-easing-preset').value;
+    if (p === 'custom') return cubicBezier(customCP[0], customCP[1], customCP[2], customCP[3]);
+    return EASINGS[p] || EASINGS.linear;
+  }
+
+  // ── Easing graph canvas ─────────────────────────────────────────────────────
   var gEl = document.getElementById('ln-graph');
   var gCtx = gEl.getContext('2d');
-  var GS = 400; // canvas internal size
-  var PAD = 36;
-  var GW = GS - PAD * 2;
-  var GH = GS - PAD * 2;
+  var GS = 400, GPAD = 36, GW = GS - GPAD*2, GH = GS - GPAD*2;
 
-  function toCv(nx, ny) {
-    return [PAD + nx * GW, PAD + (1 - ny) * GH];
-  }
-  function fromCv(cx, cy) {
-    return [(cx - PAD) / GW, 1 - (cy - PAD) / GH];
-  }
+  function gToCv(nx, ny) { return [GPAD + nx*GW, GPAD + (1-ny)*GH]; }
+  function gFromCv(cx, cy) { return [(cx-GPAD)/GW, 1-(cy-GPAD)/GH]; }
 
   function drawGraph() {
     gCtx.clearRect(0, 0, GS, GS);
-
-    // background (canvas doesn't use CSS bg for drawing)
-    gCtx.fillStyle = '#0a0a18';
-    gCtx.fillRect(0, 0, GS, GS);
-
-    // grid
-    gCtx.strokeStyle = 'rgba(255,255,255,0.07)';
-    gCtx.lineWidth = 1;
+    gCtx.fillStyle = '#0a0a18'; gCtx.fillRect(0, 0, GS, GS);
+    gCtx.strokeStyle = 'rgba(255,255,255,0.07)'; gCtx.lineWidth = 1;
     for (var i = 0; i <= 4; i++) {
-      var gx = PAD + (i/4)*GW;
-      var gy = PAD + (i/4)*GH;
-      gCtx.beginPath(); gCtx.moveTo(gx, PAD); gCtx.lineTo(gx, PAD+GH); gCtx.stroke();
-      gCtx.beginPath(); gCtx.moveTo(PAD, gy); gCtx.lineTo(PAD+GW, gy); gCtx.stroke();
+      var gx = GPAD+(i/4)*GW, gy = GPAD+(i/4)*GH;
+      gCtx.beginPath(); gCtx.moveTo(gx,GPAD); gCtx.lineTo(gx,GPAD+GH); gCtx.stroke();
+      gCtx.beginPath(); gCtx.moveTo(GPAD,gy); gCtx.lineTo(GPAD+GW,gy); gCtx.stroke();
     }
-
-    // diagonal hint
-    gCtx.strokeStyle = 'rgba(255,255,255,0.06)';
-    gCtx.lineWidth = 1;
-    gCtx.setLineDash([6,6]);
-    gCtx.beginPath();
-    var a0 = toCv(0,0), a1 = toCv(1,1);
-    gCtx.moveTo(a0[0], a0[1]); gCtx.lineTo(a1[0], a1[1]);
-    gCtx.stroke();
+    gCtx.strokeStyle = 'rgba(255,255,255,0.06)'; gCtx.setLineDash([6,6]);
+    var a0=gToCv(0,0), a1=gToCv(1,1);
+    gCtx.beginPath(); gCtx.moveTo(a0[0],a0[1]); gCtx.lineTo(a1[0],a1[1]); gCtx.stroke();
     gCtx.setLineDash([]);
-
-    // border
-    gCtx.strokeStyle = 'rgba(255,255,255,0.15)';
-    gCtx.lineWidth = 1.5;
-    gCtx.strokeRect(PAD, PAD, GW, GH);
+    gCtx.strokeStyle = 'rgba(255,255,255,0.15)'; gCtx.lineWidth = 1.5;
+    gCtx.strokeRect(GPAD, GPAD, GW, GH);
 
     var color = document.getElementById('ln-color').value;
-
-    // custom handle lines
     if (isCustom) {
-      var p0 = toCv(0, 0), p1 = toCv(handles[0].x, handles[0].y);
-      var p2 = toCv(handles[1].x, handles[1].y), p3 = toCv(1, 1);
-      gCtx.strokeStyle = 'rgba(255,255,255,0.2)';
-      gCtx.lineWidth = 1.5;
-      gCtx.setLineDash([4, 4]);
-      gCtx.beginPath(); gCtx.moveTo(p0[0], p0[1]); gCtx.lineTo(p1[0], p1[1]); gCtx.stroke();
-      gCtx.beginPath(); gCtx.moveTo(p3[0], p3[1]); gCtx.lineTo(p2[0], p2[1]); gCtx.stroke();
+      var p0=gToCv(0,0), p1=gToCv(gHandles[0].x,gHandles[0].y);
+      var p2=gToCv(gHandles[1].x,gHandles[1].y), p3=gToCv(1,1);
+      gCtx.strokeStyle = 'rgba(255,255,255,0.22)'; gCtx.lineWidth = 1.5; gCtx.setLineDash([4,4]);
+      gCtx.beginPath(); gCtx.moveTo(p0[0],p0[1]); gCtx.lineTo(p1[0],p1[1]); gCtx.stroke();
+      gCtx.beginPath(); gCtx.moveTo(p3[0],p3[1]); gCtx.lineTo(p2[0],p2[1]); gCtx.stroke();
       gCtx.setLineDash([]);
     }
-
-    // curve
     var ease = getEaseFn();
-    gCtx.strokeStyle = color;
-    gCtx.lineWidth = 3;
-    gCtx.shadowColor = color;
-    gCtx.shadowBlur = 6;
+    gCtx.strokeStyle = color; gCtx.lineWidth = 3; gCtx.shadowColor = color; gCtx.shadowBlur = 6;
     gCtx.beginPath();
     for (var s = 0; s <= 200; s++) {
-      var t = s / 200;
-      var v = ease(t);
-      v = Math.max(-0.18, Math.min(1.18, v));
-      var pt = toCv(t, v);
-      s === 0 ? gCtx.moveTo(pt[0], pt[1]) : gCtx.lineTo(pt[0], pt[1]);
+      var t = s/200, v = Math.max(-0.18, Math.min(1.18, ease(t)));
+      var pt = gToCv(t, v);
+      s === 0 ? gCtx.moveTo(pt[0],pt[1]) : gCtx.lineTo(pt[0],pt[1]);
     }
-    gCtx.stroke();
-    gCtx.shadowBlur = 0;
-
-    // anchor dots
+    gCtx.stroke(); gCtx.shadowBlur = 0;
     gCtx.fillStyle = 'rgba(255,255,255,0.6)';
-    var d0 = toCv(0,0); gCtx.beginPath(); gCtx.arc(d0[0], d0[1], 5, 0, Math.PI*2); gCtx.fill();
-    var d1 = toCv(1,1); gCtx.beginPath(); gCtx.arc(d1[0], d1[1], 5, 0, Math.PI*2); gCtx.fill();
-
-    // draggable handles (custom only)
+    var d0=gToCv(0,0); gCtx.beginPath(); gCtx.arc(d0[0],d0[1],5,0,Math.PI*2); gCtx.fill();
+    var d1=gToCv(1,1); gCtx.beginPath(); gCtx.arc(d1[0],d1[1],5,0,Math.PI*2); gCtx.fill();
     if (isCustom) {
-      handles.forEach(function(h) {
-        var pt = toCv(h.x, h.y);
-        gCtx.fillStyle = color;
-        gCtx.beginPath(); gCtx.arc(pt[0], pt[1], 8, 0, Math.PI*2); gCtx.fill();
-        gCtx.strokeStyle = '#fff';
-        gCtx.lineWidth = 2;
-        gCtx.stroke();
+      gHandles.forEach(function(h) {
+        var pt = gToCv(h.x, h.y);
+        gCtx.fillStyle = color; gCtx.beginPath(); gCtx.arc(pt[0],pt[1],8,0,Math.PI*2); gCtx.fill();
+        gCtx.strokeStyle = '#fff'; gCtx.lineWidth = 2; gCtx.stroke();
       });
     }
   }
 
-  // Handle drag
-  var dragging = null;
-
-  function cvPos(e) {
-    var rect = gEl.getBoundingClientRect();
-    var scaleX = GS / rect.width;
-    var scaleY = GS / rect.height;
-    var clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    var clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    return [(clientX - rect.left) * scaleX, (clientY - rect.top) * scaleY];
+  var gDragging = null;
+  function gCvPos(e) {
+    var r = gEl.getBoundingClientRect();
+    var cx = e.touches ? e.touches[0].clientX : e.clientX;
+    var cy = e.touches ? e.touches[0].clientY : e.clientY;
+    return [(cx-r.left)*(GS/r.width), (cy-r.top)*(GS/r.height)];
   }
-
-  function nearHandle(cx, cy) {
-    for (var i = 0; i < handles.length; i++) {
-      var pt = toCv(handles[i].x, handles[i].y);
-      if (Math.hypot(cx - pt[0], cy - pt[1]) < 14) return i;
+  function gNearHandle(cx, cy) {
+    for (var i = 0; i < gHandles.length; i++) {
+      var pt = gToCv(gHandles[i].x, gHandles[i].y);
+      if (Math.hypot(cx-pt[0], cy-pt[1]) < 14) return i;
     }
     return null;
   }
-
   gEl.addEventListener('mousedown', function(e) {
     if (!isCustom) return;
-    var pos = cvPos(e);
-    dragging = nearHandle(pos[0], pos[1]);
+    gDragging = gNearHandle.apply(null, gCvPos(e));
   });
   gEl.addEventListener('touchstart', function(e) {
-    if (!isCustom) return;
-    e.preventDefault();
-    var pos = cvPos(e);
-    dragging = nearHandle(pos[0], pos[1]);
+    if (!isCustom) return; e.preventDefault();
+    gDragging = gNearHandle.apply(null, gCvPos(e));
   }, { passive: false });
-
-  function onDrag(e) {
-    if (dragging === null || !isCustom) return;
-    var pos = cvPos(e);
-    var nxy = fromCv(pos[0], pos[1]);
-    var nx = Math.max(0, Math.min(1, nxy[0]));
-    var ny = Math.max(-0.18, Math.min(1.18, nxy[1]));
-    handles[dragging] = { x: nx, y: ny };
-    customCP = [handles[0].x, handles[0].y, handles[1].x, handles[1].y];
+  function onGMove(e) {
+    if (gDragging === null || !isCustom) return;
+    var pos = gCvPos(e);
+    var nx = Math.max(0, Math.min(1, gFromCv(pos[0], pos[1])[0]));
+    var ny = Math.max(-0.18, Math.min(1.18, gFromCv(pos[0], pos[1])[1]));
+    gHandles[gDragging] = { x: nx, y: ny };
+    customCP = [gHandles[0].x, gHandles[0].y, gHandles[1].x, gHandles[1].y];
     drawGraph();
   }
-  gEl.addEventListener('mousemove', onDrag);
-  gEl.addEventListener('touchmove', function(e) { e.preventDefault(); onDrag(e); }, { passive: false });
-  window.addEventListener('mouseup', function() { dragging = null; });
-  window.addEventListener('touchend', function() { dragging = null; });
+  gEl.addEventListener('mousemove', onGMove);
+  gEl.addEventListener('touchmove', function(e) { e.preventDefault(); onGMove(e); }, { passive: false });
+  window.addEventListener('mouseup', function() { gDragging = null; });
+  window.addEventListener('touchend', function() { gDragging = null; });
 
   document.getElementById('ln-easing-preset').addEventListener('change', function() {
-    var preset = document.getElementById('ln-easing-preset').value;
+    var preset = this.value;
     isCustom = preset === 'custom';
     gEl.className = isCustom ? 'ln-graph-canvas editable' : 'ln-graph-canvas';
     document.getElementById('ln-graph-hint').textContent = isCustom
       ? 'Drag the colored handles to reshape the curve'
       : 'Select "Custom Bezier" to drag the handles';
-
     var cp = PRESET_CP[preset];
-    if (cp) {
-      handles = [{ x: cp[0], y: cp[1] }, { x: cp[2], y: cp[3] }];
-      customCP = cp.slice();
-    }
+    if (cp) { gHandles = [{ x: cp[0], y: cp[1] }, { x: cp[2], y: cp[3] }]; customCP = cp.slice(); }
     drawGraph();
+    startLoad();
+  });
+
+  // ── Timeline ────────────────────────────────────────────────────────────────
+  var tlKFs = [
+    { t: 0, p: 0, locked: true },
+    { t: 1, p: 1, locked: true },
+  ];
+  var tlSegs = ['easeInOutQuad']; // easing per segment (length = tlKFs.length - 1)
+  var tlSelKF = null;   // selected keyframe index
+  var tlSelSeg = 0;     // selected segment index
+  var tlDragging = null;
+  var tlDragMoved = false;
+
+  function tlProgress(rawT) {
+    for (var i = 0; i < tlKFs.length - 1; i++) {
+      var a = tlKFs[i], b = tlKFs[i+1];
+      if (rawT >= a.t && rawT <= b.t) {
+        var dt = b.t - a.t;
+        var segT = dt < 0.0001 ? 1 : (rawT - a.t) / dt;
+        var ease = EASINGS[tlSegs[i]] || EASINGS.linear;
+        return a.p + ease(segT) * (b.p - a.p);
+      }
+    }
+    return rawT >= 1 ? 1 : 0;
+  }
+
+  var tlEl = document.getElementById('ln-tl');
+  var tlCtx = tlEl.getContext('2d');
+  var TW = 800, TH = 220;
+  var TPL = 50, TPR = 20, TPT = 20, TPB = 36;
+  var TGW = TW - TPL - TPR, TGH = TH - TPT - TPB;
+
+  function tlToCv(t, p) { return [TPL + t*TGW, TPT + (1-p)*TGH]; }
+  function tlFromCv(cx, cy) { return [(cx-TPL)/TGW, 1-(cy-TPT)/TGH]; }
+
+  function drawTimeline() {
+    tlCtx.clearRect(0, 0, TW, TH);
+    tlCtx.fillStyle = '#0a0a18'; tlCtx.fillRect(0, 0, TW, TH);
+
+    // grid
+    tlCtx.strokeStyle = 'rgba(255,255,255,0.06)'; tlCtx.lineWidth = 1;
+    for (var i = 0; i <= 10; i++) {
+      var gx = TPL + (i/10)*TGW;
+      tlCtx.beginPath(); tlCtx.moveTo(gx,TPT); tlCtx.lineTo(gx,TPT+TGH); tlCtx.stroke();
+    }
+    for (var j = 0; j <= 4; j++) {
+      var gy = TPT + (j/4)*TGH;
+      tlCtx.beginPath(); tlCtx.moveTo(TPL,gy); tlCtx.lineTo(TPL+TGW,gy); tlCtx.stroke();
+    }
+    // border
+    tlCtx.strokeStyle = 'rgba(255,255,255,0.15)'; tlCtx.lineWidth = 1.5;
+    tlCtx.strokeRect(TPL, TPT, TGW, TGH);
+
+    // axis labels
+    tlCtx.fillStyle = 'rgba(255,255,255,0.3)';
+    tlCtx.font = '18px system-ui, sans-serif';
+    tlCtx.textAlign = 'center';
+    var tLabels = ['0%','25%','50%','75%','100%'];
+    for (var k = 0; k <= 4; k++) {
+      tlCtx.fillText(tLabels[k], TPL + (k/4)*TGW, TH - 6);
+    }
+    tlCtx.textAlign = 'right';
+    var pLabels = ['100','75','50','25','0'];
+    for (var m = 0; m <= 4; m++) {
+      tlCtx.fillText(pLabels[m]+'%', TPL - 6, TPT + (m/4)*TGH + 6);
+    }
+
+    var color = document.getElementById('ln-color').value;
+
+    // draw segments
+    for (var si = 0; si < tlKFs.length - 1; si++) {
+      var a = tlKFs[si], b = tlKFs[si+1];
+      var isSel = si === tlSelSeg;
+      var ease = EASINGS[tlSegs[si]] || EASINGS.linear;
+
+      // shaded area under segment
+      if (isSel) {
+        tlCtx.fillStyle = 'rgba(11,133,200,0.06)';
+        var ptA = tlToCv(a.t, 0), ptB = tlToCv(b.t, 0);
+        tlCtx.beginPath();
+        tlCtx.moveTo(ptA[0], TPT + TGH);
+        for (var s2 = 0; s2 <= 40; s2++) {
+          var st = s2/40, sv = Math.max(0, Math.min(1, ease(st)));
+          var sprog = a.p + sv*(b.p - a.p);
+          var stime = a.t + st*(b.t - a.t);
+          var spt = tlToCv(stime, sprog);
+          tlCtx.lineTo(spt[0], spt[1]);
+        }
+        tlCtx.lineTo(ptB[0], TPT + TGH);
+        tlCtx.closePath();
+        tlCtx.fill();
+      }
+
+      tlCtx.strokeStyle = isSel ? color : 'rgba(255,255,255,0.28)';
+      tlCtx.lineWidth = isSel ? 2.5 : 1.5;
+      if (isSel) { tlCtx.shadowColor = color; tlCtx.shadowBlur = 5; }
+      tlCtx.beginPath();
+      for (var s = 0; s <= 80; s++) {
+        var segT = s/80;
+        var eased = ease(segT);
+        var prog = a.p + Math.max(0, Math.min(1, eased)) * (b.p - a.p);
+        var time = a.t + segT * (b.t - a.t);
+        var pt = tlToCv(time, prog);
+        s === 0 ? tlCtx.moveTo(pt[0], pt[1]) : tlCtx.lineTo(pt[0], pt[1]);
+      }
+      tlCtx.stroke();
+      tlCtx.shadowBlur = 0;
+    }
+
+    // draw keyframes
+    for (var ki = 0; ki < tlKFs.length; ki++) {
+      var kf = tlKFs[ki];
+      var kpt = tlToCv(kf.t, kf.p);
+      var kSel = ki === tlSelKF;
+      var r = kSel ? 9 : (kf.locked ? 6 : 7);
+      tlCtx.fillStyle = kSel ? color : (kf.locked ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.35)');
+      tlCtx.beginPath(); tlCtx.arc(kpt[0], kpt[1], r, 0, Math.PI*2); tlCtx.fill();
+      if (kSel) {
+        tlCtx.strokeStyle = '#fff'; tlCtx.lineWidth = 2;
+        tlCtx.beginPath(); tlCtx.arc(kpt[0], kpt[1], r, 0, Math.PI*2); tlCtx.stroke();
+      }
+    }
+  }
+
+  function tlCvPos(e) {
+    var rect = tlEl.getBoundingClientRect();
+    var cx = e.touches ? e.touches[0].clientX : e.clientX;
+    var cy = e.touches ? e.touches[0].clientY : e.clientY;
+    return [(cx - rect.left) * (TW / rect.width), (cy - rect.top) * (TH / rect.height)];
+  }
+
+  function tlNearKF(cx, cy) {
+    for (var i = 0; i < tlKFs.length; i++) {
+      var pt = tlToCv(tlKFs[i].t, tlKFs[i].p);
+      if (Math.hypot(cx - pt[0], cy - pt[1]) < 14) return i;
+    }
+    return null;
+  }
+
+  function tlSegAtT(t) {
+    for (var i = 0; i < tlKFs.length - 1; i++) {
+      if (t >= tlKFs[i].t && t <= tlKFs[i+1].t) return i;
+    }
+    return 0;
+  }
+
+  function tlInBounds(cx, cy) {
+    return cx >= TPL && cx <= TPL+TGW && cy >= TPT && cy <= TPT+TGH;
+  }
+
+  function tlSelectKF(idx) {
+    tlSelKF = idx;
+    tlSelSeg = idx !== null ? Math.min(idx, tlKFs.length - 2) : tlSelSeg;
+    tlUpdateUI();
+    drawTimeline();
+  }
+
+  function tlSelectSeg(idx) {
+    tlSelKF = null;
+    tlSelSeg = idx;
+    tlUpdateUI();
+    drawTimeline();
+  }
+
+  function tlUpdateUI() {
+    var info = document.getElementById('ln-tl-kf-info');
+    var segSel = document.getElementById('ln-seg-easing');
+    segSel.value = tlSegs[tlSelSeg] || 'linear';
+    var delBtn = document.getElementById('ln-delete-kf');
+    if (tlSelKF !== null) {
+      var kf = tlKFs[tlSelKF];
+      info.textContent = 'Keyframe ' + tlSelKF + ' — time: ' + Math.round(kf.t*100) + '%, progress: ' + Math.round(kf.p*100) + '%' + (kf.locked ? ' (locked)' : '');
+      delBtn.disabled = kf.locked;
+    } else {
+      info.textContent = 'Segment ' + tlSelSeg + ' easing: ' + (tlSegs[tlSelSeg] || 'linear');
+      delBtn.disabled = true;
+    }
+  }
+
+  tlEl.addEventListener('mousedown', function(e) {
+    if (!document.getElementById('ln-timeline-mode').checked) return;
+    var pos = tlCvPos(e);
+    var near = tlNearKF(pos[0], pos[1]);
+    tlDragMoved = false;
+    if (near !== null) {
+      tlDragging = near;
+      tlSelectKF(near);
+    }
+    e.preventDefault();
+  });
+  tlEl.addEventListener('touchstart', function(e) {
+    if (!document.getElementById('ln-timeline-mode').checked) return;
+    e.preventDefault();
+    var pos = tlCvPos(e);
+    var near = tlNearKF(pos[0], pos[1]);
+    tlDragMoved = false;
+    if (near !== null) { tlDragging = near; tlSelectKF(near); }
+  }, { passive: false });
+
+  window.addEventListener('mousemove', function(e) {
+    if (tlDragging === null) return;
+    var pos = tlCvPos(e);
+    var tp = tlFromCv(pos[0], pos[1]);
+    var kf = tlKFs[tlDragging];
+    if (!kf.locked) {
+      var tMin = tlDragging > 0 ? tlKFs[tlDragging-1].t + 0.005 : 0;
+      var tMax = tlDragging < tlKFs.length-1 ? tlKFs[tlDragging+1].t - 0.005 : 1;
+      kf.t = Math.max(tMin, Math.min(tMax, tp[0]));
+    }
+    kf.p = Math.max(0, Math.min(1, tp[1]));
+    tlDragMoved = true;
+    tlUpdateUI();
+    drawTimeline();
+  });
+  window.addEventListener('mouseup', function() {
+    tlDragging = null;
+  });
+  window.addEventListener('touchend', function() { tlDragging = null; });
+  tlEl.addEventListener('touchmove', function(e) {
+    if (tlDragging === null) return;
+    e.preventDefault();
+    var pos = tlCvPos(e);
+    var tp = tlFromCv(pos[0], pos[1]);
+    var kf = tlKFs[tlDragging];
+    if (!kf.locked) {
+      var tMin = tlDragging > 0 ? tlKFs[tlDragging-1].t + 0.005 : 0;
+      var tMax = tlDragging < tlKFs.length-1 ? tlKFs[tlDragging+1].t - 0.005 : 1;
+      kf.t = Math.max(tMin, Math.min(tMax, tp[0]));
+    }
+    kf.p = Math.max(0, Math.min(1, tp[1]));
+    tlDragMoved = true;
+    tlUpdateUI();
+    drawTimeline();
+  }, { passive: false });
+
+  tlEl.addEventListener('click', function(e) {
+    if (!document.getElementById('ln-timeline-mode').checked) return;
+    if (tlDragMoved) { tlDragMoved = false; return; }
+    var pos = tlCvPos(e);
+    var near = tlNearKF(pos[0], pos[1]);
+    if (near !== null) {
+      tlSelectKF(near);
+      return;
+    }
+    // click on segment or empty — if in bounds, select segment or add KF
+    if (!tlInBounds(pos[0], pos[1])) return;
+    var tp = tlFromCv(pos[0], pos[1]);
+    var t = Math.max(0.01, Math.min(0.99, tp[0]));
+    // check if t is on an existing segment boundary (close to KF) — select segment
+    var seg = tlSegAtT(t);
+    // add keyframe
+    var p = Math.max(0, Math.min(1, tp[1]));
+    var insertIdx = seg + 1;
+    tlKFs.splice(insertIdx, 0, { t: t, p: p, locked: false });
+    tlSegs.splice(insertIdx, 0, tlSegs[seg] || 'linear');
+    tlSelectKF(insertIdx);
+    startLoad();
+  });
+
+  tlEl.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    if (!document.getElementById('ln-timeline-mode').checked) return;
+    var pos = tlCvPos(e);
+    var near = tlNearKF(pos[0], pos[1]);
+    if (near !== null && !tlKFs[near].locked) {
+      tlKFs.splice(near, 1);
+      tlSegs.splice(near, 1);
+      if (tlSelKF !== null && tlSelKF >= near) tlSelKF = null;
+      tlSelSeg = Math.min(tlSelSeg, tlSegs.length - 1);
+      tlUpdateUI();
+      drawTimeline();
+      startLoad();
+    } else if (near === null && tlInBounds(pos[0], pos[1])) {
+      // right click on segment → select it
+      var tp = tlFromCv(pos[0], pos[1]);
+      tlSelectSeg(tlSegAtT(Math.max(0, Math.min(1, tp[0]))));
+    }
+  });
+
+  document.getElementById('ln-seg-easing').addEventListener('change', function() {
+    tlSegs[tlSelSeg] = this.value;
+    tlUpdateUI();
+    drawTimeline();
+    startLoad();
+  });
+
+  document.getElementById('ln-delete-kf').addEventListener('click', function() {
+    if (tlSelKF === null || tlKFs[tlSelKF].locked) return;
+    var idx = tlSelKF;
+    tlKFs.splice(idx, 1);
+    tlSegs.splice(idx, 1);
+    tlSelKF = null;
+    tlSelSeg = Math.min(tlSelSeg, tlSegs.length - 1);
+    tlUpdateUI();
+    drawTimeline();
+    startLoad();
+  });
+
+  document.getElementById('ln-timeline-mode').addEventListener('change', function() {
+    var on = this.checked;
+    document.getElementById('ln-tl-panel').classList.toggle('active', on);
+    document.getElementById('ln-easing-section').style.display = on ? 'none' : '';
+    if (on) { drawTimeline(); }
     startLoad();
   });
 
@@ -622,34 +870,24 @@
     "BSOD avoided (barely)…",
     "Kernel panic suppressed. You're welcome…",
   ];
-
   var speedMap = { slow: 8000, normal: 4000, fast: 1800, ludicrous: 500 };
-
-  var rafId = null;
-  var msgQueue = [];
-  var msgIdx = 0;
 
   function shuffle(arr) {
     var a = arr.slice();
-    for (var i = a.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
-    }
+    for (var i = a.length-1; i > 0; i--) { var j = Math.floor(Math.random()*(i+1)); var tmp=a[i]; a[i]=a[j]; a[j]=tmp; }
     return a;
   }
-
   function getMessages() {
     var custom = document.getElementById('ln-custom-msgs').value.trim();
     if (custom) return custom.split('\n').filter(function(l) { return l.trim(); });
     return document.getElementById('ln-random-msgs').checked ? MESSAGES.slice() : ['Loading…'];
   }
-
   function setBar(p) {
     var v = Math.max(0, Math.min(100, p));
-    document.getElementById('ln-preview-bar').style.width = v + '%';
-    document.getElementById('ln-preview-pct').textContent = Math.round(v) + '%';
-    document.getElementById('ln-fs-bar').style.width = v + '%';
-    document.getElementById('ln-fs-pct').textContent = Math.round(v) + '%';
+    document.getElementById('ln-preview-bar').style.width = v+'%';
+    document.getElementById('ln-preview-pct').textContent = Math.round(v)+'%';
+    document.getElementById('ln-fs-bar').style.width = v+'%';
+    document.getElementById('ln-fs-pct').textContent = Math.round(v)+'%';
   }
   function setMsg(m) {
     document.getElementById('ln-preview-msg').textContent = m;
@@ -664,6 +902,10 @@
     document.getElementById('ln-fs-bar').style.background = c;
   }
 
+  // ── Main animation ──────────────────────────────────────────────────────────
+  var rafId = null;
+  var msgQueue = [], msgIdx = 0;
+
   function startLoad() {
     if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
 
@@ -672,105 +914,79 @@
     setBar(0);
     setMsg(msgQueue[0] || 'Loading…');
     setTitle(document.getElementById('ln-title-input').value || 'Loading…');
-    var barColor = document.getElementById('ln-color').value;
-    setColor(barColor);
+    setColor(document.getElementById('ln-color').value);
 
     var duration = speedMap[document.getElementById('ln-speed').value] || 4000;
     var useErrors = document.getElementById('ln-fake-errors').checked;
-    var doLoop   = document.getElementById('ln-loop').checked;
-    var easeFn   = getEaseFn();
+    var doLoop    = document.getElementById('ln-loop').checked;
+    var tlMode    = document.getElementById('ln-timeline-mode').checked;
+    var progressFn = tlMode ? tlProgress : function(t) { return getEaseFn()(t); };
 
-    var startTime = null;
-    var stallStart = 0;
-    var stallUntil = 0;
-    var stallOffset = 0; // total ms of stalls, subtracted from elapsed
+    var startTime = null, stallStart = 0, stallUntil = 0, stallOffset = 0;
 
     function frame(now) {
       if (startTime === null) startTime = now;
-
-      // stall in progress
       if (stallUntil > 0) {
         if (now < stallUntil) { rafId = requestAnimationFrame(frame); return; }
         stallOffset += stallUntil - stallStart;
-        stallUntil = 0;
-        stallStart = 0;
+        stallUntil = 0; stallStart = 0;
       }
-
       var elapsed = Math.max(0, now - startTime - stallOffset);
       var rawT = Math.min(1, elapsed / duration);
-      var visual = easeFn(rawT);
+      var visual = progressFn(rawT);
       setBar(visual * 100);
-
-      // trigger a stall occasionally (~4% chance per second while in mid-range)
       if (useErrors && stallUntil === 0 && rawT > 0.08 && rawT < 0.90 && Math.random() < 0.0006) {
         stallStart = now;
         stallUntil = now + Math.random() * 1000 + 300;
         setMsg(ERRORS[Math.floor(Math.random() * ERRORS.length)]);
       }
-
-      // rotate messages based on rawT
       if (stallUntil === 0) {
-        var ni = Math.min(msgQueue.length - 1, Math.floor(rawT * msgQueue.length));
+        var ni = Math.min(msgQueue.length-1, Math.floor(rawT * msgQueue.length));
         if (ni !== msgIdx) { msgIdx = ni; setMsg(msgQueue[msgIdx]); }
       }
-
       if (rawT < 1) {
         rafId = requestAnimationFrame(frame);
       } else {
-        setBar(100);
-        setMsg('Done.');
-        rafId = null;
-        if (doLoop) {
-          setTimeout(function() { startLoad(); }, 800);
-        }
+        setBar(100); setMsg('Done.'); rafId = null;
+        if (doLoop) setTimeout(startLoad, 800);
       }
     }
     rafId = requestAnimationFrame(frame);
   }
 
-  // ── Controls ────────────────────────────────────────────────────────────────
-  document.getElementById('ln-title-input').addEventListener('input', function() {
-    setTitle(this.value || 'Loading…');
-  });
+  // ── Control bindings ────────────────────────────────────────────────────────
+  document.getElementById('ln-title-input').addEventListener('input', function() { setTitle(this.value || 'Loading…'); });
   document.getElementById('ln-color').addEventListener('input', function(e) {
-    setColor(e.target.value); drawGraph();
+    setColor(e.target.value); drawGraph(); if (document.getElementById('ln-timeline-mode').checked) drawTimeline();
   });
   document.getElementById('ln-speed').addEventListener('change', startLoad);
   document.getElementById('ln-random-msgs').addEventListener('change', startLoad);
   document.getElementById('ln-fake-errors').addEventListener('change', startLoad);
-  document.getElementById('ln-loop').addEventListener('change', function() {
-    if (this.checked) startLoad();
-  });
+  document.getElementById('ln-loop').addEventListener('change', function() { if (this.checked) startLoad(); });
   document.getElementById('ln-restart-btn').addEventListener('click', startLoad);
 
   document.getElementById('ln-fullscreen-btn').addEventListener('click', function() {
-    document.getElementById('ln-fs').classList.add('active');
-    startLoad();
+    document.getElementById('ln-fs').classList.add('active'); startLoad();
   });
   document.getElementById('ln-fs-exit').addEventListener('click', function() {
-    document.getElementById('ln-fs').classList.remove('active');
-    startLoad();
+    document.getElementById('ln-fs').classList.remove('active'); startLoad();
   });
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') document.getElementById('ln-fs-exit').click();
     if (e.key === 'F11') { e.preventDefault(); document.getElementById('ln-fullscreen-btn').click(); }
   });
-
   document.getElementById('ln-download-btn').addEventListener('click', async function() {
     try {
-      const { default: html2canvas } = await import('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.esm.js');
-      const canvas = await html2canvas(document.getElementById('ln-preview'), { backgroundColor: '#000' });
-      const a = document.createElement('a');
-      a.download = 'loading-screen.png';
-      a.href = canvas.toDataURL();
-      a.click();
-    } catch(err) {
-      alert('Download requires an internet connection for the screenshot library.');
-    }
+      var mod = await import('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.esm.js');
+      var canvas = await mod.default(document.getElementById('ln-preview'), { backgroundColor: '#000' });
+      var a = document.createElement('a'); a.download = 'loading-screen.png'; a.href = canvas.toDataURL(); a.click();
+    } catch(err) { alert('Download requires an internet connection for the screenshot library.'); }
   });
 
   // ── Init ────────────────────────────────────────────────────────────────────
   drawGraph();
+  drawTimeline();
+  tlUpdateUI();
   startLoad();
   </script>
   <script src="/static/site.js"></script>
