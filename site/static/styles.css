@@ -354,6 +354,17 @@ input[type="text"] {
   gap: 0.6rem;
 }
 
+.hub-section-title {
+  font-size: 1rem;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 1.2rem 0 0.6rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--line);
+}
+.hub-section-title:first-child { margin-top: 0; }
+
 .hub-back {
   color: var(--ink-soft);
   text-decoration: none;
