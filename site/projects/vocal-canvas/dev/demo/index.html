@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dev Demo | Vocal Canvas</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body data-page="dev-demo">
+  <div class="bg-shape shape-a" aria-hidden="true"></div>
+  <div class="bg-shape shape-b" aria-hidden="true"></div>
+  <main class="site-wrap">
+    <header class="site-header">
+      <div class="brand-row">
+        <div class="brand-block">
+          <div class="brand">Vocal Canvas <span class="beta-badge dev-badge">DEV MODE</span></div>
+          <div class="brand-version">Private preview</div>
+        </div>
+        <div class="header-links dev-header-links">
+          <a class="projects-jump" href="/projects/vocal-canvas/">Public Site</a>
+          <button class="source-jump dev-logout-btn" type="button" onclick="sessionStorage.removeItem('vc_dev_auth');window.location.href='/projects/vocal-canvas/dev/';">leave dev mode</button>
+        </div>
+      </div>
+      <nav class="tabs" aria-label="Dev menu">
+        <a class="tab" style="--tab-index:0;" href="/projects/vocal-canvas/dev/home/">Dev Home</a>
+        <a class="tab is-active" style="--tab-index:1;" href="/projects/vocal-canvas/dev/demo/">Dev Demo</a>
+        <a class="tab" style="--tab-index:2;" href="/projects/vocal-canvas/dev/qa/">Dev Q&amp;A</a>
+        <a class="tab" style="--tab-index:3;" href="/projects/vocal-canvas/dev/download/">Dev Download</a>
+      </nav>
+    </header>
+    <section class="page-card dev-card">
+      <p class="dev-banner">Private preview only.</p>
+      <div class="page-intro">
+        <h1>Dev Demo</h1>
+        <p>Test the demo experience privately before pushing changes public.</p>
+      </div>
+      <div class="demo-shell">
+        <div class="field">
+          <label for="voice-select">Voice</label>
+          <select id="voice-select" class="demo-select"></select>
+        </div>
+        <div class="field">
+          <label for="text-input">Text (max 300 chars)</label>
+          <textarea id="text-input" maxlength="300">Download Vocal Canvas today — the free, on-device text-to-speech toolkit for content creators.</textarea>
+          <div class="meta-row"><span id="char-count">0 / 300</span></div>
+        </div>
+        <button id="generate-btn" type="button" class="primary-btn">Speak</button>
+        <button id="stop-btn" type="button" class="secondary-btn" style="display:none;">Stop</button>
+        <p id="status" class="status idle">Ready.</p>
+      </div>
+    </section>
+  </main>
+  <script>if (sessionStorage.getItem('vc_dev_auth') !== '1') window.location.href = '/projects/vocal-canvas/dev/';</script>
+  <script>
+    const textarea = document.getElementById('text-input');
+    const charCount = document.getElementById('char-count');
+    const voiceSelect = document.getElementById('voice-select');
+    const generateBtn = document.getElementById('generate-btn');
+    const stopBtn = document.getElementById('stop-btn');
+    const status = document.getElementById('status');
+    function updateCount() { charCount.textContent = `${textarea.value.length} / 300`; }
+    textarea.addEventListener('input', updateCount); updateCount();
+    let voices = [];
+    function loadVoices() {
+      voices = speechSynthesis.getVoices();
+      voiceSelect.innerHTML = '';
+      voices.forEach((v, i) => { const o = document.createElement('option'); o.value = i; o.textContent = `${v.name} (${v.lang})`; voiceSelect.appendChild(o); });
+    }
+    speechSynthesis.addEventListener('voiceschanged', loadVoices); loadVoices();
+    generateBtn.addEventListener('click', () => {
+      const text = textarea.value.trim(); if (!text) return;
+      speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      if (voices[voiceSelect.value]) utter.voice = voices[voiceSelect.value];
+      utter.onstart = () => { status.textContent = 'Speaking…'; status.className = 'status'; stopBtn.style.display = ''; generateBtn.style.display = 'none'; };
+      utter.onend = utter.onerror = () => { status.textContent = 'Done.'; status.className = 'status idle'; stopBtn.style.display = 'none'; generateBtn.style.display = ''; };
+      speechSynthesis.speak(utter);
+    });
+    stopBtn.addEventListener('click', () => speechSynthesis.cancel());
+  </script>
+  <script src="/static/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dev Q&A | Vocal Canvas</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body data-page="dev-qa">
+  <div class="bg-shape shape-a" aria-hidden="true"></div>
+  <div class="bg-shape shape-b" aria-hidden="true"></div>
+  <main class="site-wrap">
+    <header class="site-header">
+      <div class="brand-row">
+        <div class="brand-block">
+          <div class="brand">Vocal Canvas <span class="beta-badge dev-badge">DEV MODE</span></div>
+          <div class="brand-version">Private preview</div>
+        </div>
+        <div class="header-links dev-header-links">
+          <a class="projects-jump" href="/projects/vocal-canvas/">Public Site</a>
+          <button class="source-jump dev-logout-btn" type="button" onclick="sessionStorage.removeItem('vc_dev_auth');window.location.href='/projects/vocal-canvas/dev/';">leave dev mode</button>
+        </div>
+      </div>
+      <nav class="tabs" aria-label="Dev menu">
+        <a class="tab" style="--tab-index:0;" href="/projects/vocal-canvas/dev/home/">Dev Home</a>
+        <a class="tab" style="--tab-index:1;" href="/projects/vocal-canvas/dev/demo/">Dev Demo</a>
+        <a class="tab is-active" style="--tab-index:2;" href="/projects/vocal-canvas/dev/qa/">Dev Q&amp;A</a>
+        <a class="tab" style="--tab-index:3;" href="/projects/vocal-canvas/dev/download/">Dev Download</a>
+      </nav>
+    </header>
+    <section class="page-card dev-card">
+      <p class="dev-banner">Private preview only.</p>
+      <div class="page-intro">
+        <h1>Dev Q&amp;A</h1>
+        <p>Draft answers and internal documentation before publishing to the public Q&amp;A tab.</p>
+      </div>
+      <div class="home-grid">
+        <article class="info-card">
+          <h2>Private Documentation</h2>
+          <ul>
+            <li>Write upcoming FAQ entries here first.</li>
+            <li>Prepare known issues and release caveats for v0.2.0.</li>
+            <li>Only publish after validation.</li>
+          </ul>
+        </article>
+        <article class="info-card">
+          <h2>Visibility</h2>
+          <p class="muted">This content is restricted to authenticated Dev Mode users.</p>
+        </article>
+      </div>
+      <hr class="dev-divider">
+      <div class="page-intro">
+        <h1>Public Q&amp;A (Private Copy)</h1>
+        <p>Private copy of the public Q&amp;A content.</p>
+      </div>
+      <div class="empty-panel stacked-empty">
+        <h1>Vocal Canvas</h1>
+        <p class="version-note">v0.1.1 (Beta)</p>
+        <p class="empty-copy">The Q&amp;A section is currently being expanded. Detailed answers and documentation will be available soon.</p>
+      </div>
+    </section>
+  </main>
+  <script>if (sessionStorage.getItem('vc_dev_auth') !== '1') window.location.href = '/projects/vocal-canvas/dev/';</script>
+  <script src="/static/site.js"></script>
+</body>
+</html>

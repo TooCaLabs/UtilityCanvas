@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dev Download | Vocal Canvas</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body data-page="dev-download">
+  <div class="bg-shape shape-a" aria-hidden="true"></div>
+  <div class="bg-shape shape-b" aria-hidden="true"></div>
+  <main class="site-wrap">
+    <header class="site-header">
+      <div class="brand-row">
+        <div class="brand-block">
+          <div class="brand">Vocal Canvas <span class="beta-badge dev-badge">DEV MODE</span></div>
+          <div class="brand-version">Private preview</div>
+        </div>
+        <div class="header-links dev-header-links">
+          <a class="projects-jump" href="/projects/vocal-canvas/">Public Site</a>
+          <button class="source-jump dev-logout-btn" type="button" onclick="sessionStorage.removeItem('vc_dev_auth');window.location.href='/projects/vocal-canvas/dev/';">leave dev mode</button>
+        </div>
+      </div>
+      <nav class="tabs" aria-label="Dev menu">
+        <a class="tab" style="--tab-index:0;" href="/projects/vocal-canvas/dev/home/">Dev Home</a>
+        <a class="tab" style="--tab-index:1;" href="/projects/vocal-canvas/dev/demo/">Dev Demo</a>
+        <a class="tab" style="--tab-index:2;" href="/projects/vocal-canvas/dev/qa/">Dev Q&amp;A</a>
+        <a class="tab is-active" style="--tab-index:3;" href="/projects/vocal-canvas/dev/download/">Dev Download</a>
+      </nav>
+    </header>
+    <section class="page-card dev-card">
+      <p class="dev-banner">Private preview only.</p>
+      <div class="page-intro">
+        <h1>Dev Download</h1>
+        <p>Private release staging for installer strategy and package rollout decisions.</p>
+      </div>
+      <div class="home-grid">
+        <article class="info-card">
+          <h2>Internal Release Checklist</h2>
+          <ul>
+            <li>Verify macOS build and launch flow.</li>
+            <li>Validate Windows package and private build.</li>
+            <li>Confirm changelog and beta messaging before public publish.</li>
+          </ul>
+        </article>
+        <article class="info-card">
+          <h2>Public Safety</h2>
+          <p class="muted">Updates prepared here stay private until you manually apply them to public pages.</p>
+        </article>
+      </div>
+      <hr class="dev-divider">
+      <div class="page-intro">
+        <h1>Public Download (Private Copy)</h1>
+        <p>Private copy of the public Download page.</p>
+      </div>
+      <div class="download-grid">
+        <article class="download-card">
+          <h2>macOS ★ (Recommended)</h2>
+          <p>Disk image containing <strong>Vocal Canvas.app</strong>.</p>
+          <p class="muted">File: Vocal.Canvas.1.2.1.Beta.zip</p>
+          <a class="primary-btn" href="https://github.com/TooCaLabs/UtilityCanvas/releases/latest" target="_blank" rel="noopener noreferrer">Download macOS</a>
+        </article>
+        <article class="download-card">
+          <h2>Windows (Python Package)</h2>
+          <p>Python package for Windows (script + setup instructions).</p>
+          <p class="warning compact">Windows package is not available right now.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+  <script>if (sessionStorage.getItem('vc_dev_auth') !== '1') window.location.href = '/projects/vocal-canvas/dev/';</script>
+  <script src="/static/site.js"></script>
+</body>
+</html>

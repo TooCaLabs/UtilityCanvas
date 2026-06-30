@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dev Mode Login | Vocal Canvas</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body data-page="dev-login">
+  <div class="bg-shape shape-a" aria-hidden="true"></div>
+  <div class="bg-shape shape-b" aria-hidden="true"></div>
+  <main class="site-wrap">
+    <header class="site-header">
+      <div class="brand-row">
+        <div class="brand-block">
+          <div class="brand">Vocal Canvas <span class="beta-badge dev-badge">DEV MODE</span></div>
+          <div class="brand-version">Private preview login</div>
+        </div>
+        <a class="projects-jump" href="/projects/vocal-canvas/">Back To Public Site</a>
+      </div>
+    </header>
+    <section class="page-card dev-card">
+      <div class="page-intro">
+        <h1>Dev Mode Access</h1>
+        <p>Enter your password to access private preview pages.</p>
+      </div>
+      <div class="dev-login-form">
+        <label for="dev-password">Password</label>
+        <input id="dev-password" type="password" autocomplete="current-password">
+        <button class="primary-btn" id="dev-login-btn" type="button">Enter Dev Mode</button>
+      </div>
+      <p id="dev-status" class="status idle">Locked and private.</p>
+    </section>
+  </main>
+  <script>
+    const HASH = "4da76edae243d588998467d07d5480a44f3830e15f07a5d1e321696df888c6c5";
+    async function sha256(msg) {
+      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(msg));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,"0")).join("");
+    }
+    document.getElementById('dev-login-btn').addEventListener('click', async () => {
+      const pw = document.getElementById('dev-password').value;
+      const hash = await sha256(pw);
+      if (hash === HASH) {
+        sessionStorage.setItem('vc_dev_auth', '1');
+        window.location.href = '/projects/vocal-canvas/dev/home/';
+      } else {
+        document.getElementById('dev-status').textContent = 'Wrong password.';
+        document.getElementById('dev-status').className = 'status error';
+      }
+    });
+    document.getElementById('dev-password').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('dev-login-btn').click();
+    });
+    if (sessionStorage.getItem('vc_dev_auth') === '1') {
+      window.location.href = '/projects/vocal-canvas/dev/home/';
+    }
+  </script>
+  <script src="/static/site.js"></script>
+</body>
+</html>

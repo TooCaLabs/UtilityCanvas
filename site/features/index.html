@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Features | UtilityCanvas</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body data-page="features">
+  <div class="bg-shape shape-a" aria-hidden="true"></div>
+  <div class="bg-shape shape-b" aria-hidden="true"></div>
+
+  <main class="site-wrap hub-wrap">
+    <header class="site-header hub-header">
+      <p class="hub-kicker"><a href="/" class="hub-back">← UtilityCanvas</a></p>
+      <h1 class="hub-title">Features</h1>
+      <p class="hub-copy">Everything Vocal Canvas can do, in one place.</p>
+    </header>
+
+    <section class="page-card features-list">
+
+      <div class="feature-card">
+        <button class="feature-toggle" aria-expanded="false">
+          <span class="feature-toggle-title">Studio — Text to Speech</span>
+          <span class="feature-toggle-arrow">▸</span>
+        </button>
+        <div class="feature-body" hidden>
+          <p>Type or paste any text and have it read aloud instantly using any macOS system voice. Adjust speaking rate from 80 to 400 WPM. Preview in the app or export directly to a WAV file.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <button class="feature-toggle" aria-expanded="false">
+          <span class="feature-toggle-title">Voice Selection</span>
+          <span class="feature-toggle-arrow">▸</span>
+        </button>
+        <div class="feature-body" hidden>
+          <p>Choose from every voice installed on your Mac — including regional accents and languages. The dropdown lists all available voices and updates automatically when new ones are added in System Settings.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <button class="feature-toggle" aria-expanded="false">
+          <span class="feature-toggle-title">V3TS — Voice to Text to Speech</span>
+          <span class="feature-toggle-arrow">▸</span>
+        </button>
+        <div class="feature-body" hidden>
+          <p>A real-time voice mirror: speak into your mic, and the app transcribes and reads it back through the selected system voice instantly — with no cloud round-trips. Powered by an on-device Whisper model.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <button class="feature-toggle" aria-expanded="false">
+          <span class="feature-toggle-title">On-Device Transcription</span>
+          <span class="feature-toggle-arrow">▸</span>
+        </button>
+        <div class="feature-body" hidden>
+          <p>Speech recognition runs entirely on your machine using faster-whisper. No audio is ever sent to a server. Choose between tiny, base, or small Whisper model to balance speed and accuracy.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <button class="feature-toggle" aria-expanded="false">
+          <span class="feature-toggle-title">Virtual Microphone Output</span>
+          <span class="feature-toggle-arrow">▸</span>
+        </button>
+        <div class="feature-body" hidden>
+          <p>When BlackHole 2ch is installed, the synthesized voice is routed to a virtual microphone visible in macOS System Settings. Discord, Zoom, OBS, and any other app can select it as their mic input.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <button class="feature-toggle" aria-expanded="false">
+          <span class="feature-toggle-title">Feedback Loop Prevention</span>
+          <span class="feature-toggle-arrow">▸</span>
+        </button>
+        <div class="feature-body" hidden>
+          <p>The mic listener is automatically muted while the synthesized voice plays, with a 500ms acoustic echo tail. This stops the app from hearing and re-reading its own TTS output in an infinite loop.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <button class="feature-toggle" aria-expanded="false">
+          <span class="feature-toggle-title">WAV Export</span>
+          <span class="feature-toggle-arrow">▸</span>
+        </button>
+        <div class="feature-body" hidden>
+          <p>Export any TTS output as a high-quality WAV file directly from the Studio tab. No third-party tools needed — uses macOS's built-in audio conversion tools.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <button class="feature-toggle" aria-expanded="false">
+          <span class="feature-toggle-title">Single Instance Guard</span>
+          <span class="feature-toggle-arrow">▸</span>
+        </button>
+        <div class="feature-body" hidden>
+          <p>Opening the app a second time while it's already running brings the existing window to the front instead of spawning a duplicate.</p>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    document.querySelectorAll('.feature-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', !expanded);
+        btn.querySelector('.feature-toggle-arrow').textContent = expanded ? '▸' : '▾';
+        const body = btn.nextElementSibling;
+        if (expanded) body.setAttribute('hidden', ''); else body.removeAttribute('hidden');
+      });
+    });
+  </script>
+  <script src="/static/site.js"></script>
+</body>
+</html>

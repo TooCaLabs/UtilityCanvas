@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home | Vocal Canvas</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body data-page="home">
+  <div class="bg-shape shape-a" aria-hidden="true"></div>
+  <div class="bg-shape shape-b" aria-hidden="true"></div>
+  <main class="site-wrap">
+    <header class="site-header">
+      <div class="brand-row">
+        <div class="brand-block">
+          <div class="brand">Vocal Canvas <span class="beta-badge">BETA</span></div>
+          <div class="brand-version">v0.1.1</div>
+        </div>
+        <div class="header-links">
+          <a class="projects-jump" href="/">All Projects</a>
+          <a class="source-jump" href="https://github.com/TooCaLabs/UtilityCanvas" target="_blank" rel="noopener noreferrer">source code (github)</a>
+        </div>
+      </div>
+      <nav class="tabs" aria-label="Main tabs">
+        <a class="tab is-active" style="--tab-index:0;" href="/projects/vocal-canvas/">Home</a>
+        <a class="tab" style="--tab-index:1;" href="/projects/vocal-canvas/demo/">Demo</a>
+        <a class="tab" style="--tab-index:2;" href="/projects/vocal-canvas/qa/">Q&amp;A</a>
+        <a class="tab" style="--tab-index:3;" href="/projects/vocal-canvas/download/">Download</a>
+      </nav>
+    </header>
+    <section class="page-card">
+      <div class="page-intro">
+        <h1>Vocal Canvas</h1>
+        <p class="version-note">v0.1.1 (Beta)</p>
+        <p class="beta-warning">Public beta: features, UI details, and packaging behavior may change quickly.</p>
+      </div>
+      <div class="home-grid">
+        <article class="info-card">
+          <h2>Install on macOS</h2>
+          <ol>
+            <li>Go to the <strong>Download</strong> tab.</li>
+            <li>Download <code>VocalCanvas.dmg</code>.</li>
+            <li>Open the DMG and drag <code>Vocal Canvas.app</code> to <code>Applications</code>.</li>
+            <li>Open the app from <code>Applications</code> (use right-click → Open on first launch if prompted).</li>
+          </ol>
+        </article>
+        <article class="info-card">
+          <h2>Install on Windows</h2>
+          <ol>
+            <li>Go to the <strong>Download</strong> tab.</li>
+            <li>Download <code>VocalCanvasWindows.zip</code> and extract it.</li>
+            <li>Install Python 3.10+ if needed.</li>
+            <li>Run:</li>
+          </ol>
+          <pre><code>pip install -r requirements.txt
+python vocal_canvas_windows.py</code></pre>
+        </article>
+        <article class="info-card">
+          <h2>Features</h2>
+          <ul>
+            <li>Multi-page website with Home, Demo, Q&amp;A, and Download tabs</li>
+            <li>Quick online TTS demo preview</li>
+            <li>Desktop app with full controls (voice selection, speed, generation, export)</li>
+            <li>Downloadable macOS and Windows builds</li>
+            <li>Unified dark visual style for site and app</li>
+          </ul>
+        </article>
+        <article class="info-card">
+          <h2>What to Expect in Beta</h2>
+          <ul>
+            <li>Frequent design and feature updates</li>
+            <li>Potential installer and first-launch edge cases</li>
+            <li>Some sections still being expanded (including Q&amp;A docs)</li>
+            <li>Rapid bug-fix releases between versions</li>
+          </ul>
+        </article>
+      </div>
+
+      <section class="blog-section">
+        <h2 class="blog-header">V3TS</h2>
+        <article class="blog-post">
+          <h3>What is V3TS?</h3>
+          <p>V3TS (Voice to Text to Speech) is a real-time voice mirror built into the Vocal Canvas desktop app. It listens through your microphone, transcribes what you say using an on-device Whisper model, and instantly reads it back through the selected system voice — all without any cloud round-trips.</p>
+        </article>
+        <article class="blog-post">
+          <h3>On-Device Transcription</h3>
+          <p>Transcription runs entirely on your machine using <strong>faster-whisper</strong>, a local implementation of OpenAI's Whisper model. No audio is ever sent to a server. The tiny model delivers around 230ms inference time on a 1-second audio clip, keeping the experience near-instant even when you're talking fast.</p>
+        </article>
+        <article class="blog-post">
+          <h3>Feedback Loop Prevention</h3>
+          <p>V3TS automatically mutes the microphone listener while the synthesized voice is playing, plus a 500ms tail to catch acoustic echo. This prevents the app from hearing and re-reading its own TTS output in a loop.</p>
+        </article>
+        <article class="blog-post">
+          <h3>Virtual Microphone Output</h3>
+          <p>When <strong>BlackHole 2ch</strong> is installed, V3TS routes the synthesized voice to a virtual microphone visible in macOS System Settings. Any other app — Discord, Zoom, OBS, and more — can select that virtual mic as its input and receive the synthesized voice directly.</p>
+        </article>
+        <article class="blog-post">
+          <h3>Configurable Controls</h3>
+          <p>Pick any macOS system voice, set the speaking rate, choose your input microphone, and select the Whisper model size (tiny, base, or small) to trade speed for accuracy. All settings are applied live with no restart required.</p>
+        </article>
+      </section>
+
+      <div class="muted-note">
+        Feedback helps shape the beta release.
+        <a href="https://github.com/TooCaLabs/UtilityCanvas" target="_blank" rel="noopener noreferrer">source code (github)</a>
+      </div>
+    </section>
+  </main>
+  <script src="/static/site.js"></script>
+</body>
+</html>
