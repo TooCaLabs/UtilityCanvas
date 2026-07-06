@@ -10,7 +10,7 @@ Project repository: [ARealGoldknow/UtilityCanvas](https://github.com/ARealGoldkn
 
 ## Version
 
-`v0.1.1 (Beta)`
+`v0.2.1 (Beta)`
 
 ## Install
 
